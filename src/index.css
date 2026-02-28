@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@theme {
+    /* --color prefix will set a custom color.
+        You can then name it what you like and call it like a normal class
+        eg. 'bg-dark-grey'
+    */
+    --color-light-red: #cf3030;
+    --color-purple: #840B55;
+    --color-light-gray: #DED7D6;
+    --color-dark-gray: #656565;
+    --color-light-blue: #BDCDDA;
+    --color-dark-blue: #002855;
+    --color-peach: #F4C59E;
+    --color-mint: #DFEBC2;
+    --color-success: #98C93C;
+    --color-error: #D95757;
+}
