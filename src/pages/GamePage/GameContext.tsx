@@ -21,7 +21,13 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
     case 'SET_ERROR':
       return { ...state, error: action.payload, loading: false };
     case 'SET_LOADING':
-      return { ...state, error: action.payload };
+      return { ...state, loading: action.payload };
+    case 'SET_OUT':
+      return { ...state, data: state.data?.players.map((player) =>
+        player.id === action.payload.id
+          ? { ...player, isIn: false }
+          : player
+      ), }
     default:
       return state;
   }
@@ -34,7 +40,7 @@ export const GameProvider = ({ children }: GameProviderProps) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const apiUrl = import.meta.env.VITE_API_URL;
   const { gameId } = useParams();
-  
+
   const fetchData = async () => {
     dispatch({ type: 'SET_LOADING', payload: true });
     const response = await fetch(`${apiUrl}games/${gameId}`);

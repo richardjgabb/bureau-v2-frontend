@@ -2,17 +2,18 @@ import ContentCardMedium from "../../Atoms/ContentCard/ContentCardMedium"
 import ContentHeader from "../../Atoms/ContentHeader/ContentHeader"
 import ContentText from "../../Atoms/ContextText/ContextText"
 import DealIcon from "../../Atoms/DealIcon/DealIcon"
-import ResultRadioButtons from "../../ResultRadioButtons/ResultRadioButtons"
+import ResultRadioButtons from "../ResultRadioButtons/ResultRadioButtons"
 import type { PlayerCardProps } from "./types"
 import { useGameState } from "../../../pages/GamePage/useGameState"
+import InOutRadioButtons from "../InOutRadioButtons/InOutRadioButtons"
 
-const PlayerCard = ({ playerName, playerId, playerScore }: PlayerCardProps) => {
+const PlayerCard = ({ playerName, playerId, playerScore, showResultButtons }: PlayerCardProps) => {
+
+    const { state, dispatch } = useGameState();
 
     const handleClick = () => {
         dispatch({ type: 'SET_DEALER', payload: playerId });
     }
-
-    const { state, dispatch } = useGameState();
 
     return (
         <div onClick={handleClick}
@@ -24,7 +25,8 @@ const PlayerCard = ({ playerName, playerId, playerScore }: PlayerCardProps) => {
                     <ContentHeader text={playerName}/>
                     <ContentText text={playerScore} />
                 </div>
-                <ResultRadioButtons playerId={playerId} />
+                {!showResultButtons && <InOutRadioButtons playerId={playerId}/>}
+                {showResultButtons && <ResultRadioButtons playerId={playerId} />}
             </ContentCardMedium>
         </div>
     )

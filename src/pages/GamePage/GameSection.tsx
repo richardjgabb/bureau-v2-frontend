@@ -11,6 +11,7 @@ import type { Player } from "../../PropTypes"
 import { useGameState } from "./useGameState"
 import ScoreboardModal from "../../components/Sections/ScoreboardModal/ScoreboardModal"
 import MomentumModal from "../../components/Sections/MomentumModal/MomentumModal"
+import { postScore } from "../../hooks/fetch/fetchScore"
 
 const GameSection = () => {
 
@@ -18,6 +19,15 @@ const GameSection = () => {
     const [showStats, setShowStats] = useState(false);
     const [showScoreboard, setShowScoreboard] = useState(false);
     const [showMomentum, setShowMomentum] = useState(false);
+    const [showResultButtons, setShowResultButtons] = useState(false)
+
+    const handleSubmit = () => {
+        if (!showResultButtons) {
+            setShowResultButtons(true)
+            return
+        }
+        postScore(state.data?.id, state.data)
+    }
 
     return (
         <section className="flex flex-col gap-4 transition-all duration-300">
@@ -31,6 +41,7 @@ const GameSection = () => {
                     playerId={player.id}
                     playerName={player.name}
                     playerScore={player.current_score}
+                    showResultButtons={showResultButtons}
                 />
             ))}
             </RowContainer>
@@ -38,7 +49,7 @@ const GameSection = () => {
             {showStats && <StatsModal />}
             {showScoreboard && <ScoreboardModal setShowScoreboard={setShowScoreboard}/>}
             <RowContainer>
-                <PrimaryButton text={'Submit'} onClick={() => {}} type="button"/>
+                <PrimaryButton text={'Submit'} onClick={handleSubmit} type="button"/>
                 <SecondaryButton text={'Scoreboard'} onClick={() => {setShowScoreboard(!showScoreboard)}} type="button"/>
                 <SecondaryButton text={'Momentum'} onClick={() => {setShowMomentum(!showMomentum)}} type="button"/>
                 <SecondaryButton text={'Edit Game'} onClick={() => {}} type="button"/>

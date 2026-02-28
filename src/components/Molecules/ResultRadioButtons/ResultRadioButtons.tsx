@@ -1,8 +1,8 @@
 import { useState } from "react"
-import RadioButton from "../Atoms/RadioButton/RadioButton.tsx"
-import RowContainer from "../Atoms/RowContainer/RowContainer.tsx"
+import RadioButton from "../../Atoms/RadioButton/RadioButton.tsx"
+import RowContainer from "../../Atoms/RowContainer/RowContainer.tsx"
 import type { ResultRadioButtonsProps } from "./types"
-import { useGameState } from "../../pages/GamePage/useGameState.ts"
+import { useGameState } from "../../../pages/GamePage/useGameState.ts"
 
 const ResultRadioButtons = ({ playerId  }: ResultRadioButtonsProps) => {
 

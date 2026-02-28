@@ -19,7 +19,7 @@ export interface GameData {
 export interface GamePageState {
     potWinnerId: number;
     dealerId: number;
-    data?: {players: Player[], name: string} | null;
+    data?: GameData | null;
     error: string | null;
     loading: boolean;
 }
@@ -28,7 +28,8 @@ export type GamePageAction =
     | { type: 'SET_POT_WINNER' | 'SET_DEALER'; payload: number; }
     | {type: 'SET_DATA'; payload: object; }
     | {type: 'SET_ERROR'; payload: string; }
-    | {type: 'SET_LOADING'; payload: boolean; };
+    | {type: 'SET_LOADING'; payload: boolean; }
+    | {type: 'SET_OUT'; payload: {id: number}; }
 
 export interface GameProviderProps {
     children: React.ReactNode;
