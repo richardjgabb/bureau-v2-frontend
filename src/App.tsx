@@ -9,7 +9,7 @@ import StatsPage from "./pages/StatsPage/StatsPage"
 function App() {
 
   return (
-    <div className={"min-h-screen bg-black/90 p-4 transition-all duration-2000"}>
+    <div className={"min-h-screen bg-black/90 p-2 transition-all duration-2000"}>
       <NavBar />
       <BrowserRouter>
         <Routes>

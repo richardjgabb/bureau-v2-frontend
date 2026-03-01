@@ -9,7 +9,9 @@ type Player = {
     name: string;
     scores: [];
     stats: [];
-    current_score: string;
+    current_score: number;
+    frozen?: boolean;
+    isIn?: boolean;
 }
 
 type PlayersArray = {

@@ -9,15 +9,16 @@ const InOutRadioButtons = ({ playerId }: InOutRadioButtonsProps) => {
     const [selected, setSelected] = useState('In')
     const { state, dispatch } = useGameState();
 
-    const handleIn = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
-        e.stopPropagation()
-        setSelected('In');
-        dispatch({ type: 'SET_OUT', payload: { 'id': playerId } });
-    }
-
     const handleOut = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
         e.stopPropagation()
         setSelected('Out');
+        dispatch({ type: 'SET_OUT', payload: { 'id': playerId } });
+    }
+
+    const handleIn = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+        e.stopPropagation()
+        setSelected('In');
+        dispatch({ type: 'SET_IN', payload: { 'id': playerId } });
     }
 
     return (

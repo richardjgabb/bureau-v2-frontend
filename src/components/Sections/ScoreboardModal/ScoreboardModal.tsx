@@ -27,7 +27,7 @@ const ScoreboardModal = ({ setShowScoreboard }: ScoreboardModalProps) => {
                             <tr className="text-white" key={'row' + index}>
                                 {state.data?.players && state.data.players.map(player => (
                                     <td key={player.id + index} className="text-center px-2 py-1">
-                                        { player.scores[index]?.score ?? '-' }
+                                        { player.scores[index]?.score ? `£${(player.scores[index]?.score/100).toFixed(2)}` : '-' }
                                     </td>
                                 ))}
                                 <td key={'pot' + index} className="text-center px-2 py-1">

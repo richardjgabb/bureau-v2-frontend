@@ -12,10 +12,13 @@ import { useGameState } from "./useGameState"
 import ScoreboardModal from "../../components/Sections/ScoreboardModal/ScoreboardModal"
 import MomentumModal from "../../components/Sections/MomentumModal/MomentumModal"
 import { postScore } from "../../hooks/fetch/fetchScore"
+import { replaceBuyIns, takeBuyIns } from "../../hooks/buyIns"
+import BackButton from "../../components/Atoms/BackButton/BackButton"
+import { postUndo } from "../../hooks/fetch/postUndo"
 
 const GameSection = () => {
 
-    const { state } = useGameState();
+    const { state, dispatch } = useGameState();
     const [showStats, setShowStats] = useState(false);
     const [showScoreboard, setShowScoreboard] = useState(false);
     const [showMomentum, setShowMomentum] = useState(false);
@@ -23,10 +26,24 @@ const GameSection = () => {
 
     const handleSubmit = () => {
         if (!showResultButtons) {
+            dispatch({ type: 'SET_PLAYERS', payload: takeBuyIns(state.data.players, state.data.buyIn) })
             setShowResultButtons(true)
             return
         }
+        dispatch({ type: 'SET_LOADING', payload: true })
         postScore(state.data?.id, state.data)
+        dispatch({ type: 'SET_LOADING', payload: false })
+    }
+
+    const handleBackButton = () => {
+        if (showResultButtons) {
+            dispatch({ type: 'SET_PLAYERS', payload: replaceBuyIns(state.data.players, state.data.buyIn) })
+            setShowResultButtons(false)
+            return
+        }
+        dispatch({ type: 'SET_LOADING', payload: true })
+        postUndo(state.data?.id, 1)
+        dispatch({ type: 'SET_LOADING', payload: false })
     }
 
     return (
@@ -34,7 +51,7 @@ const GameSection = () => {
             <MainHeader text={state.data ? state.data.name : 'Game'} />
             {state.loading && <LoadingSpinner />}
             {state.error && <ErrorSpan message={state.error} />}
-            {!!(!showStats && !showScoreboard) && <><RowContainer>
+            {!!(!showStats && !showScoreboard) && <><RowContainer><BackButton onClick={handleBackButton} />
             {state.data?.players && state.data.players.map((player: Player) => (
                 <PlayerCard
                     key={player.id}

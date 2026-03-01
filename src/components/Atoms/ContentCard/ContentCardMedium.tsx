@@ -4,7 +4,7 @@ import type { ContentCardProps } from './types';
 const ContentCardMedium = ({ children}: ContentCardProps) => {
 
     return (
-        <ContentCard className={"w-[45vw] md:w-[28vw] lg:w-[22vw]"}>
+        <ContentCard className={"w-[42vw] md:w-[28vw] lg:w-[22vw]"}>
             { children }
         </ContentCard>
     )

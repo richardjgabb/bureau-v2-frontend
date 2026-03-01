@@ -23,7 +23,7 @@ const PlayerCard = ({ playerName, playerId, playerScore, showResultButtons }: Pl
                 {state.dealerId === playerId && <DealIcon />}
                 <div className="flex flex-col">
                     <ContentHeader text={playerName}/>
-                    <ContentText text={playerScore} />
+                    <ContentText text={`£${(playerScore/100).toFixed(2).toString()}`} />
                 </div>
                 {!showResultButtons && <InOutRadioButtons playerId={playerId}/>}
                 {showResultButtons && <ResultRadioButtons playerId={playerId} />}

@@ -22,12 +22,26 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
       return { ...state, error: action.payload, loading: false };
     case 'SET_LOADING':
       return { ...state, loading: action.payload };
+    case 'SET_PLAYERS':
+      return { ...state, data: { ...state.data, players: action.payload }}
     case 'SET_OUT':
       return { ...state, data: state.data?.players.map((player) =>
         player.id === action.payload.id
           ? { ...player, isIn: false }
           : player
-      ), }
+      ), };
+    case 'SET_IN':
+      return { ...state, data: state.data?.players.map((player) =>
+        player.id === action.payload.id
+          ? { ...player, isIn: true }
+          : player
+      ), };
+      case 'TOGGLE_FROZEN':
+        return { ...state, data: state.data?.players.map((player) =>
+          player.id === action.payload.id
+            ? { ...player, frozen: !player.frozen }
+            : player
+        ), };
     default:
       return state;
   }
