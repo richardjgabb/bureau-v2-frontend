@@ -1,6 +1,7 @@
 import { createContext, useEffect, useReducer } from 'react';
 import type { GameContextType, GamePageAction, GamePageState, GameProviderProps } from './types';
 import { useParams } from 'react-router-dom';
+import { fetchGameData } from '../../hooks/fetch/fetchScore';
 
 const initialState = {
   potWinnerId: 0,
@@ -13,7 +14,49 @@ const initialState = {
 const reducer = (state: GamePageState, action: GamePageAction) => {
   switch (action.type) {
     case 'SET_POT_WINNER':
-      return { ...state, potWinnerId: action.payload };
+      return {
+        ...state,
+        potWinnerId: action.payload,
+        data: {
+          ...state.data,
+          players: {
+            ...state.data.players, // Keep all other players
+            [action.payload]: {   // Update ONLY the one with this ID
+              ...state.data.players[action.payload],
+              result: 'win'
+            }
+          }
+        }
+      };
+      case 'SET_SAFE':
+      return {
+        ...state,
+        potWinnerId: action.payload,
+        data: {
+          ...state.data,
+          players: {
+            ...state.data.players, // Keep all other players
+            [action.payload]: {   // Update ONLY the one with this ID
+              ...state.data.players[action.payload],
+              result: 'safe'
+            }
+          }
+        }
+      };
+    case 'SET_BUED':
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          players: {
+            ...state.data.players, // Keep all other players
+            [action.payload]: {   // Update ONLY the one with this ID
+              ...state.data.players[action.payload],
+              result: 'bued'
+            }
+          }
+        }
+      };
     case 'SET_DEALER':
       return { ...state, dealerId: action.payload };
     case 'SET_DATA':
@@ -24,18 +67,36 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
       return { ...state, loading: action.payload };
     case 'SET_PLAYERS':
       return { ...state, data: { ...state.data, players: action.payload }}
+    case 'SET_ALL_SAFE':
+        return { ...state, data: { ...state.data, players: action.payload }}
     case 'SET_OUT':
-      return { ...state, data: state.data?.players.map((player) =>
-        player.id === action.payload.id
-          ? { ...player, isIn: false }
-          : player
-      ), };
+        return {
+          ...state,
+          data: {
+            ...state.data,
+            players: {
+              ...state.data.players,
+              [action.payload.id]: {
+                ...state.data.players[action.payload.id],
+                isIn: false
+              }
+            }
+          }
+        };
     case 'SET_IN':
-      return { ...state, data: state.data?.players.map((player) =>
-        player.id === action.payload.id
-          ? { ...player, isIn: true }
-          : player
-      ), };
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          players: {
+            ...state.data.players,
+            [action.payload.id]: {
+              ...state.data.players[action.payload.id],
+              isIn: true
+            }
+          }
+        }
+      };
       case 'TOGGLE_FROZEN':
         return { ...state, data: state.data?.players.map((player) =>
           player.id === action.payload.id
@@ -57,14 +118,8 @@ export const GameProvider = ({ children }: GameProviderProps) => {
 
   const fetchData = async () => {
     dispatch({ type: 'SET_LOADING', payload: true });
-    const response = await fetch(`${apiUrl}games/${gameId}`);
-    if (!response.ok) {
-      const errorText = `Error: ${response.status} ${response.statusText}`;
-      dispatch({ type: 'SET_ERROR', payload: errorText });
-      return;
-    }
-    const result = await response.json();
-    dispatch({ type: 'SET_DATA', payload: result.data });
+    const result = await fetchGameData(Number(gameId));
+    dispatch({ type: 'SET_DATA', payload: result });
   }
 
   useEffect(() => {

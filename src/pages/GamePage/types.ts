@@ -26,14 +26,12 @@ export interface GamePageState {
 }
 
 export type GamePageAction =
-    | {type: 'SET_POT_WINNER' | 'SET_DEALER'; payload: number; }
+    | {type: 'SET_POT_WINNER' | 'SET_DEALER' | 'SET_SAFE' |'SET_BUED'; payload: number; }
     | {type: 'SET_DATA'; payload: object; }
     | {type: 'SET_ERROR'; payload: string; }
     | {type: 'SET_LOADING'; payload: boolean; }
-    | {type: 'SET_PLAYERS'; payload: Player[]; }
-    | {type: 'SET_OUT'; payload: {id: number}; }
-    | {type: 'SET_IN'; payload: {id: number}; }
-    | {type: 'TOGGLE_FROZEN'; payload: {id: number}; }
+    | {type: 'SET_PLAYERS' | 'SET_ALL_SAFE'; payload: Player[]; }
+    | {type: 'SET_OUT' | 'SET_IN' | 'TOGGLE_FROZEN'; payload: {id: number}; }
 
 export interface GameProviderProps {
     children: React.ReactNode;

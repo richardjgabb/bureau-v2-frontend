@@ -15,6 +15,7 @@ import { postScore } from "../../hooks/fetch/fetchScore"
 import { replaceBuyIns, takeBuyIns } from "../../hooks/buyIns"
 import BackButton from "../../components/Atoms/BackButton/BackButton"
 import { postUndo } from "../../hooks/fetch/postUndo"
+import { setAllPlayersSafe } from "../../hooks/setPlayers"
 
 const GameSection = () => {
 
@@ -23,10 +24,11 @@ const GameSection = () => {
     const [showScoreboard, setShowScoreboard] = useState(false);
     const [showMomentum, setShowMomentum] = useState(false);
     const [showResultButtons, setShowResultButtons] = useState(false)
-
     const handleSubmit = () => {
         if (!showResultButtons) {
+            // TODO WHY IS PLAYERS BECOMING AN ARRAY AGAIN?
             dispatch({ type: 'SET_PLAYERS', payload: takeBuyIns(state.data.players, state.data.buyIn) })
+            dispatch({ type: 'SET_ALL_SAFE', payload: setAllPlayersSafe(state.data.players) })
             setShowResultButtons(true)
             return
         }
@@ -42,7 +44,7 @@ const GameSection = () => {
             return
         }
         dispatch({ type: 'SET_LOADING', payload: true })
-        postUndo(state.data?.id, 1)
+        postUndo(state.data?.id, state.data.round - 1)
         dispatch({ type: 'SET_LOADING', payload: false })
     }
 
@@ -52,7 +54,7 @@ const GameSection = () => {
             {state.loading && <LoadingSpinner />}
             {state.error && <ErrorSpan message={state.error} />}
             {!!(!showStats && !showScoreboard) && <><RowContainer><BackButton onClick={handleBackButton} />
-            {state.data?.players && state.data.players.map((player: Player) => (
+            {state.data?.players && Object.values(state.data.players).map((player: Player) => (
                 <PlayerCard
                     key={player.id}
                     playerId={player.id}

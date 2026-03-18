@@ -7,7 +7,7 @@ import { useGameState } from "../../../pages/GamePage/useGameState.ts"
 const InOutRadioButtons = ({ playerId }: InOutRadioButtonsProps) => {
 
     const [selected, setSelected] = useState('In')
-    const { state, dispatch } = useGameState();
+    const { dispatch } = useGameState();
 
     const handleOut = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
         e.stopPropagation()

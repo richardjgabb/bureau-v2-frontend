@@ -1,7 +1,5 @@
-import type { Player } from "../PropTypes";
-
-export const takeBuyIns = (players: Player[], buyIn: number) => {
-    return players.map(player => (
+export const takeBuyIns = (players, buyIn) => {
+    return Object.values(players).map(player => (
         player.frozen ? player :
         {
             ...player,
@@ -10,8 +8,8 @@ export const takeBuyIns = (players: Player[], buyIn: number) => {
     ))
 }
 
-export const replaceBuyIns = (players: Player[], buyIn: number) => {
-    return players.map(player => (
+export const replaceBuyIns = (players, buyIn) => {
+    return Object.values(players).map(player => (
         player.frozen ? player :
         {
             ...player,
