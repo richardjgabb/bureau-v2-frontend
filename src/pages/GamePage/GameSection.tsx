@@ -16,6 +16,7 @@ import { replaceBuyIns, takeBuyIns } from "../../hooks/buyIns"
 import BackButton from "../../components/Atoms/BackButton/BackButton"
 import { postUndo } from "../../hooks/fetch/postUndo"
 import { setAllPlayersSafe } from "../../hooks/setPlayers"
+import SubmitButton from "../../components/Atoms/SubmitButton/SubmitButton"
 
 const GameSection = () => {
 
@@ -24,17 +25,23 @@ const GameSection = () => {
     const [showScoreboard, setShowScoreboard] = useState(false);
     const [showMomentum, setShowMomentum] = useState(false);
     const [showResultButtons, setShowResultButtons] = useState(false)
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!showResultButtons) {
-            // TODO WHY IS PLAYERS BECOMING AN ARRAY AGAIN?
             dispatch({ type: 'SET_PLAYERS', payload: takeBuyIns(state.data.players, state.data.buyIn) })
             dispatch({ type: 'SET_ALL_SAFE', payload: setAllPlayersSafe(state.data.players) })
             setShowResultButtons(true)
             return
         }
         dispatch({ type: 'SET_LOADING', payload: true })
-        postScore(state.data?.id, state.data)
-        dispatch({ type: 'SET_LOADING', payload: false })
+        try {
+            postScore(state.data?.id, state.data)
+            dispatch({ type: 'RESET_ROUND'})
+            setShowResultButtons(false)
+        } catch (err) {
+            dispatch({ type: 'SET_ERROR', payload: err instanceof Error ? err.message : "An unknown error occurred" })
+        } finally {
+            dispatch({ type: 'SET_LOADING', payload: false })
+        }
     }
 
     const handleBackButton = () => {
@@ -53,27 +60,30 @@ const GameSection = () => {
             <MainHeader text={state.data ? state.data.name : 'Game'} />
             {state.loading && <LoadingSpinner />}
             {state.error && <ErrorSpan message={state.error} />}
-            {!!(!showStats && !showScoreboard) && <><RowContainer><BackButton onClick={handleBackButton} />
-            {state.data?.players && Object.values(state.data.players).map((player: Player) => (
-                <PlayerCard
-                    key={player.id}
-                    playerId={player.id}
-                    playerName={player.name}
-                    playerScore={player.current_score}
-                    showResultButtons={showResultButtons}
-                />
-            ))}
+            {!!(!showStats && !showScoreboard) && <><RowContainer>
+                {state.data?.players && Object.values(state.data.players).map((player: Player) => (
+                    <PlayerCard
+                        key={player.id}
+                        playerId={player.id}
+                        playerName={player.name}
+                        playerScore={player.current_score}
+                        showResultButtons={showResultButtons}
+                    />
+                ))}
             </RowContainer>
             <p className="text-white/80 text-[10px] px-4">ⓘ Click card to assign deal</p></>}
-            {showStats && <StatsModal />}
+            {showStats && <StatsModal setShowStats={setShowStats}/>}
             {showScoreboard && <ScoreboardModal setShowScoreboard={setShowScoreboard}/>}
             <RowContainer>
-                <PrimaryButton text={'Submit'} onClick={handleSubmit} type="button"/>
                 <SecondaryButton text={'Scoreboard'} onClick={() => {setShowScoreboard(!showScoreboard)}} type="button"/>
                 <SecondaryButton text={'Momentum'} onClick={() => {setShowMomentum(!showMomentum)}} type="button"/>
                 <SecondaryButton text={'Edit Game'} onClick={() => {}} type="button"/>
-                <SecondaryButton text={showStats ? 'Show Game': 'Show Stats'} onClick={() => setShowStats(!showStats)} type="button"/>
+                <SecondaryButton text={'Stats'} onClick={() => setShowStats(!showStats)} type="button"/>
             </RowContainer>
+            {!showStats &&<RowContainer>
+                <SubmitButton onClick={handleSubmit} />
+                <BackButton onClick={handleBackButton} />
+            </RowContainer>}
             {showMomentum && <MomentumModal setShowMomentum={setShowMomentum} />}
         </section>
     )

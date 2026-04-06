@@ -1,4 +1,5 @@
 interface PlayerEntry {
+    id: number;
     name: string;
     score: number | string;
 }
@@ -6,4 +7,5 @@ interface PlayerEntry {
 export type FormValues = {
   players: PlayerEntry[];
   buyIn: number;
+  gameName: string;
 }

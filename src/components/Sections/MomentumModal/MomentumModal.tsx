@@ -128,7 +128,7 @@ import type { MomentumModalProps } from "./types";
 
     const data = {
       labels: createLabels(state.data?.pots ?? []),
-      datasets: createDataSets(state.data?.players ?? []),
+      datasets: createDataSets(Object.values(state.data?.players) ?? []),
     };
 
     return (

@@ -32,6 +32,7 @@ export type GamePageAction =
     | {type: 'SET_LOADING'; payload: boolean; }
     | {type: 'SET_PLAYERS' | 'SET_ALL_SAFE'; payload: Player[]; }
     | {type: 'SET_OUT' | 'SET_IN' | 'TOGGLE_FROZEN'; payload: {id: number}; }
+    | {type: 'RESET_ROUND'; }
 
 export interface GameProviderProps {
     children: React.ReactNode;

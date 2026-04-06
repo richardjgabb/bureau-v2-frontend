@@ -17,10 +17,10 @@ const PlayerCard = ({ playerName, playerId, playerScore, showResultButtons }: Pl
 
     return (
         <div onClick={handleClick}
-            className={(state.dealerId === playerId ? "bg-dark-blue " : "") + "rounded-xl hover:cursor-pointer relative"}
+            className={(state.data.dealerId === playerId ? "bg-dark-blue " : "") + "rounded-xl hover:cursor-pointer relative"}
         >
             <ContentCardMedium>
-                {state.dealerId === playerId && <DealIcon />}
+                {state.data.dealerId === playerId && <DealIcon />}
                 <div className="flex flex-col">
                     <ContentHeader text={playerName}/>
                     <ContentText text={`£${(playerScore/100).toFixed(2).toString()}`} />

@@ -1,10 +1,12 @@
+import UndoIcon from "../Icons/UndoIcon"
 import type { BackButtonProps } from "./types"
 
 const BackButton = ({ onClick }: BackButtonProps) => {
     return (
-        <button className="absolute p-4 -right-2 -top-4 z-10 text-white bg-purple hover:bg-purple/60 rounded-full w-10 h-10 flex items-center justify-center hover:cursor-pointer shadow-lg hover:scale-110 duration-300"
+        <button className="px-4 py-2 rounded bg-white/80 text-black hover:cursor-pointer duration-300 hover:scale-105 w-fit flex gap-2 justify-center items-center"
             onClick={onClick}>
-            ↩
+            <UndoIcon />
+            Undo
         </button>
     )
 }

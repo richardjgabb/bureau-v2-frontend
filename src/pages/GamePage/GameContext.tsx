@@ -4,8 +4,6 @@ import { useParams } from 'react-router-dom';
 import { fetchGameData } from '../../hooks/fetch/fetchScore';
 
 const initialState = {
-  potWinnerId: 0,
-  dealerId: 0,
   data: {},
   error: null,
   loading: false,
@@ -16,12 +14,12 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
     case 'SET_POT_WINNER':
       return {
         ...state,
-        potWinnerId: action.payload,
         data: {
           ...state.data,
+          potWinnerId: action.payload,
           players: {
-            ...state.data.players, // Keep all other players
-            [action.payload]: {   // Update ONLY the one with this ID
+            ...state.data.players,
+            [action.payload]: {
               ...state.data.players[action.payload],
               result: 'win'
             }
@@ -31,12 +29,11 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
       case 'SET_SAFE':
       return {
         ...state,
-        potWinnerId: action.payload,
         data: {
           ...state.data,
           players: {
-            ...state.data.players, // Keep all other players
-            [action.payload]: {   // Update ONLY the one with this ID
+            ...state.data.players,
+            [action.payload]: {
               ...state.data.players[action.payload],
               result: 'safe'
             }
@@ -49,8 +46,8 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
         data: {
           ...state.data,
           players: {
-            ...state.data.players, // Keep all other players
-            [action.payload]: {   // Update ONLY the one with this ID
+            ...state.data.players,
+            [action.payload]: {
               ...state.data.players[action.payload],
               result: 'bued'
             }
@@ -58,13 +55,15 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
         }
       };
     case 'SET_DEALER':
-      return { ...state, dealerId: action.payload };
+      return { ...state, data: { ...state.data, dealerId: action.payload }};
     case 'SET_DATA':
       return { ...state, data: action.payload, loading: false, error: null };
     case 'SET_ERROR':
-      return { ...state, error: action.payload, loading: false };
+      return { ...state, error: action.payload, loading: false }
     case 'SET_LOADING':
-      return { ...state, loading: action.payload };
+      return { ...state, loading: action.payload }
+    case 'RESET_ROUND':
+      return { ...state, data: { ...state.data, potWinnerId: null, dealerId: null }}
     case 'SET_PLAYERS':
       return { ...state, data: { ...state.data, players: action.payload }}
     case 'SET_ALL_SAFE':

@@ -10,6 +10,7 @@ const ResultRadioButtons = ({ playerId  }: ResultRadioButtonsProps) => {
     const { state, dispatch } = useGameState();
 
     const handleNewPotWinner = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+        console.log(state)
         e.stopPropagation()
         setSelected('Win');
         dispatch({ type: 'SET_POT_WINNER', payload: playerId });
@@ -28,12 +29,12 @@ const ResultRadioButtons = ({ playerId  }: ResultRadioButtonsProps) => {
     }
 
     const defaultToSafe = () => {
-        return (selected === 'Safe' && playerId === state.potWinnerId) || (selected !== 'Bued' && playerId !== state.potWinnerId)
+        return (selected === 'Safe' && playerId === state.data.potWinnerId) || (selected !== 'Bued' && playerId !== state.data.potWinnerId)
     }
 
     return (
         <RowContainer>
-            <RadioButton id={playerId + 'Win'} label={'Win'} checked={selected === 'Win' && playerId === state.potWinnerId} onClick={(e) => handleNewPotWinner(e)}/>
+            <RadioButton id={playerId + 'Win'} label={'Win'} checked={selected === 'Win' && playerId === state.data.potWinnerId} onClick={(e) => handleNewPotWinner(e)}/>
             <RadioButton id={playerId + 'Safe'} label={'Safe'} checked={defaultToSafe()} onClick={(e) => handleSafe(e)}/>
             <RadioButton id={playerId + 'Bued'} label={'Bued'} checked={selected === "Bued"} onClick={(e) => handleBued(e)}/>
         </RowContainer>
