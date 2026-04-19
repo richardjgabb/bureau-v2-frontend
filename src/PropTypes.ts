@@ -10,7 +10,6 @@ type Player = {
     scores: [];
     stats: [];
     current_score: number;
-    frozen?: boolean;
     isIn?: boolean;
 }
 

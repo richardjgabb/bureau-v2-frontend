@@ -15,6 +15,8 @@ export interface GameData {
     latest_score: number;
     players: Player[];
     pots: [];
+    currentPotSize: number;
+    round: number;
 }
 
 export interface GamePageState {
@@ -26,7 +28,7 @@ export interface GamePageState {
 }
 
 export type GamePageAction =
-    | {type: 'SET_POT_WINNER' | 'SET_DEALER' | 'SET_SAFE' |'SET_BUED'; payload: number; }
+    | {type: 'SET_POT_WINNER' | 'SET_DEALER' | 'SET_SAFE' |'SET_BUED' | 'UPDATE_POT_SIZE'; payload: number; }
     | {type: 'SET_DATA'; payload: object; }
     | {type: 'SET_ERROR'; payload: string; }
     | {type: 'SET_LOADING'; payload: boolean; }

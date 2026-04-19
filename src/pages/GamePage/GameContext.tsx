@@ -68,6 +68,8 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
       return { ...state, data: { ...state.data, players: action.payload }}
     case 'SET_ALL_SAFE':
         return { ...state, data: { ...state.data, players: action.payload }}
+    case 'UPDATE_POT_SIZE':
+        return { ...state, data: { ...state.data, currentPotSize: action.payload }}
     case 'SET_OUT':
         return {
           ...state,
