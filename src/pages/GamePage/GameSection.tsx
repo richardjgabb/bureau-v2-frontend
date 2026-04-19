@@ -2,7 +2,6 @@ import { useState } from "react"
 import ErrorSpan from "../../components/Atoms/ErrorSpan/ErrorSpan"
 import LoadingSpinner from "../../components/Atoms/LoadingSpinner/LoadingSpinner"
 import MainHeader from "../../components/Atoms/MainHeader/MainHeader"
-import PrimaryButton from "../../components/Atoms/PrimaryButton/PrimaryButton"
 import RowContainer from "../../components/Atoms/RowContainer/RowContainer"
 import SecondaryButton from "../../components/Atoms/SecondaryButton/SecondaryButton"
 import PlayerCard from "../../components/Molecules/PlayerCard/PlayerCard"
@@ -55,18 +54,26 @@ const GameSection = () => {
         dispatch({ type: 'SET_LOADING', payload: false })
     }
 
+    console.log(state)
+
+    const getPot = () => {
+        return state.data?.pots && state.data?.pots.length > 0 ? `£${(state.data.pots[state.data?.pots.length - 1].pot/100).toFixed(2)}` : '£0.00'
+    }
+
     return (
         <section className="flex flex-col gap-4 transition-all duration-300">
             <MainHeader text={state.data ? state.data.name : 'Game'} />
             {state.loading && <LoadingSpinner />}
             {state.error && <ErrorSpan message={state.error} />}
+            <p className="text-white/80 text-[10px] px-4">Round: {state.data?.round}</p>
+            <p className="text-white/80 text-[10px] px-4">Pot: {getPot()}</p>
             {!!(!showStats && !showScoreboard) && <><RowContainer>
                 {state.data?.players && Object.values(state.data.players).map((player: Player) => (
                     <PlayerCard
                         key={player.id}
                         playerId={player.id}
                         playerName={player.name}
-                        playerScore={player.current_score}
+                        playerScore={player.scores[player.scores.length - 1]?.score ?? 0}
                         showResultButtons={showResultButtons}
                     />
                 ))}
