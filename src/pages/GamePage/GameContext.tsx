@@ -51,7 +51,8 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
               ...state.data.players[action.payload],
               result: 'bued'
             }
-          }
+          },
+          buedIds: state.data.buedIds && state.data.buedIds.includes(action.payload) ? state.data.buedIds : [...(state.data.buedIds || []), action.payload]
         }
       };
     case 'SET_DEALER':
