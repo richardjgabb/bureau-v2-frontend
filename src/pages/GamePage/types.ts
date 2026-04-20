@@ -17,6 +17,7 @@ export interface GameData {
     pots: [];
     currentPotSize: number;
     round: number;
+    isCompuls?: boolean;
 }
 
 export interface GamePageState {

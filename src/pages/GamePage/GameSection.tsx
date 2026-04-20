@@ -18,6 +18,7 @@ import { setAllPlayersSafe } from "../../hooks/setPlayers"
 import SubmitButton from "../../components/Atoms/SubmitButton/SubmitButton"
 import ContentHeader from "../../components/Atoms/ContentHeader/ContentHeader"
 import ContentText from "../../components/Atoms/ContextText/ContextText"
+import { updateScores } from "../../hooks/updateScores"
 
 const GameSection = () => {
 
@@ -26,6 +27,7 @@ const GameSection = () => {
     const [showScoreboard, setShowScoreboard] = useState(false);
     const [showMomentum, setShowMomentum] = useState(false);
     const [showResultButtons, setShowResultButtons] = useState(false)
+
     const handleSubmit = async () => {
         if (!showResultButtons) {
             dispatch({ type: 'SET_PLAYERS', payload: takeBuyIns(state.data.players, state.data.buyIn) })
@@ -36,6 +38,7 @@ const GameSection = () => {
         }
         dispatch({ type: 'SET_LOADING', payload: true })
         try {
+            dispatch({ type: 'UPDATE_SCORES', payload: updateScores(state.data.players, state.data?.currentPotSize) })
             postScore(state.data?.id, state.data)
             dispatch({ type: 'RESET_ROUND'})
             setShowResultButtons(false)
