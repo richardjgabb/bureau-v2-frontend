@@ -6,4 +6,5 @@ export interface PrimaryButtonProps{
     onClick?: () => void;
     type: ButtonTypes
     icon?: JSX.Element
+    disabled?: boolean
 }

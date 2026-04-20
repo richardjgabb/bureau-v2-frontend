@@ -16,6 +16,8 @@ import BackButton from "../../components/Atoms/BackButton/BackButton"
 import { postUndo } from "../../hooks/fetch/postUndo"
 import { setAllPlayersSafe } from "../../hooks/setPlayers"
 import SubmitButton from "../../components/Atoms/SubmitButton/SubmitButton"
+import ContentHeader from "../../components/Atoms/ContentHeader/ContentHeader"
+import ContentText from "../../components/Atoms/ContextText/ContextText"
 
 const GameSection = () => {
 
@@ -63,9 +65,11 @@ const GameSection = () => {
             <MainHeader text={state.data ? state.data.name : 'Game'} />
             {state.loading && <LoadingSpinner />}
             {state.error && <ErrorSpan message={state.error} />}
-            <p className="text-white/80 text-[10px] px-4">Round: {state.data?.round}</p>
-            <p className="text-white/80 text-[10px] px-4">Pot: {`£${(state.data?.currentPotSize/100).toFixed(2)}`}</p>
-            <p className="text-white/80 text-[10px] px-4">Buy in: {`£${(state.data?.buyIn/100).toFixed(2)}`}</p>
+            <ContentHeader text={"Pot: £" + (state.data?.currentPotSize/100).toFixed(2)} />
+            <div className="flex mx-auto flex-row gap-4 items-between">
+                <ContentText text={"Round: " + state.data?.round} />
+                <ContentText text={"Buy in: £" +(state.data?.buyIn/100).toFixed(2)} />
+            </div>
             {!!(!showStats && !showScoreboard) && <><RowContainer>
                 {state.data?.players && Object.values(state.data.players).map((player: Player) => (
                     <PlayerCard

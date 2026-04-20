@@ -7,13 +7,20 @@ import ErrorSpan from "../../Atoms/ErrorSpan/ErrorSpan.tsx";
 import NumberInput from "../../Atoms/NumberInput/NumberInput.tsx";
 import AddButton from "../../Atoms/AddButton/AddButton.tsx";
 import SubmitButton from "../../Atoms/SubmitButton/SubmitButton.tsx";
+import { useNavigate } from "react-router-dom";
 
-const NewGameSelect = () => {
-  const { data, loading, error } = useFetch(import.meta.env.VITE_API_URL + 'players');
+const NewGameForm = () => {
+  // 1. Hook for fetching existing players
+  const { data, loading: playersLoading, error: playersError } = useFetch(import.meta.env.VITE_API_URL + 'players');
+
+  // 2. Local states for the Submission process
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
-  // Initialize form with name (for UI) and id (for backend)
   const { register, control, handleSubmit, setValue, watch } = useForm<FormValues>({
     defaultValues: {
       gameName: "",
@@ -29,6 +36,7 @@ const NewGameSelect = () => {
 
   const watchedPlayers = watch("players");
 
+  // Handle clicking outside dropdowns
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -40,12 +48,16 @@ const NewGameSelect = () => {
   }, []);
 
   const onSubmit = async (formData: FormValues) => {
-    // Transform the data so the backend only receives IDs and scores
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    // Transform data: Ensure id is null for new players so MySQL can handle the INSERT
     const payload = {
       gameName: formData.gameName,
       buyIn: formData.buyIn,
       players: formData.players.map(p => ({
-        id: p.id,
+        id: p.id || null,
+        name: p.name,
         score: p.score
       }))
     };
@@ -53,20 +65,24 @@ const NewGameSelect = () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}games`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
+      const result = await response.json();
+
       if (!response.ok) {
-        throw new Error('Failed to save the game');
+        // Capture specific backend error messages (e.g., "Database connection failed")
+        throw new Error(result.message || 'Failed to save the game');
       }
 
-      const result = await response.json();
-      console.log("Success:", result);
+      // Successful redirect using the ID returned by MySQL
+      navigate(`/games/${result.data.id}`);
     } catch (err) {
       console.error("Submission error:", err);
+      setSubmitError((err as Error).message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -77,7 +93,7 @@ const NewGameSelect = () => {
       className="flex flex-col gap-6 w-full max-w-md p-4"
     >
       <input
-        {...register("gameName", { required: true })}
+        {...register("gameName", { required: "Game name is required" })}
         type="text"
         autoComplete="off"
         placeholder="Your game name..."
@@ -100,9 +116,16 @@ const NewGameSelect = () => {
           <div key={field.id} className="relative group">
             <div className="flex gap-2">
               <div className="relative flex flex-1 gap-2">
-                {/* Visual Input: Updates 'name' for the dropdown filter */}
                 <input
-                  {...register(`players.${index}.name` as const, { required: true })}
+                  {...register(`players.${index}.name` as const, {
+                    required: true,
+                    onChange: () => {
+                        // If user types, clear ID to mark as "New Player"
+                        if (watchedPlayers[index].id) {
+                            setValue(`players.${index}.id`, "");
+                        }
+                    }
+                  })}
                   type="text"
                   autoComplete="off"
                   onFocus={() => setActiveDropdown(index)}
@@ -110,27 +133,28 @@ const NewGameSelect = () => {
                   className="grow px-4 py-2 bg-white/20 placeholder:text-white/50 text-gray-300 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all shadow-sm"
                 />
 
-                {/* Hidden ID field: This is what actually maps to the backend logic */}
-                <input
-                  type="hidden"
-                  {...register(`players.${index}.id` as const, { required: true })}
-                />
+                {/* Visual state indicator */}
+                <div className="absolute right-10 top-1/2 -translate-y-1/2 pointer-events-none">
+                  {watchedPlayers[index].id ? (
+                    <span className="text-[10px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded border border-green-500/30">Existing</span>
+                  ) : watchedPlayers[index].name ? (
+                    <span className="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded border border-blue-500/30">New</span>
+                  ) : null}
+                </div>
 
-                {/* Dropdown Logic */}
+                <input type="hidden" {...register(`players.${index}.id` as const)} />
+
                 {activeDropdown === index && data && (
-                  <ul className="absolute z-10 top-full w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl max-h-48 overflow-y-auto py-1">
+                  <ul className="absolute z-20 top-full w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl max-h-48 overflow-y-auto py-1">
                     {data?.data
                       .filter(p =>
-                        // Filter by what is typed in the 'name' input
                         p.name.toLowerCase().includes(watchedPlayers[index].name.toLowerCase()) &&
-                        // Ensure this player hasn't already been added to the game
                         !watchedPlayers.some((sp, i) => i !== index && sp.id === p.id)
                       )
                       .map((p) => (
                         <li
                           key={p.id}
                           onClick={() => {
-                            // Sync both fields upon selection
                             setValue(`players.${index}.name`, p.name);
                             setValue(`players.${index}.id`, p.id);
                             setActiveDropdown(null);
@@ -141,6 +165,9 @@ const NewGameSelect = () => {
                           <span className="text-xs text-gray-400">Select</span>
                         </li>
                       ))}
+                      <li onClick={() => setActiveDropdown(null)} className="px-4 py-2 hover:bg-gray-50 cursor-pointer text-xs text-blue-600 border-t italic">
+                        + Use "{watchedPlayers[index].name}" as new player
+                      </li>
                   </ul>
                 )}
 
@@ -151,7 +178,7 @@ const NewGameSelect = () => {
                       setValue(`players.${index}.name`, "");
                       setValue(`players.${index}.id`, "");
                     }}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-purple p-1"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-400 p-1"
                   >
                     ✕
                   </button>
@@ -162,12 +189,9 @@ const NewGameSelect = () => {
                 {...register(`players.${index}.score` as const, {
                     required: true,
                     valueAsNumber: true,
-                    min: 0
                 })}
                 id={`players.${index}.score`}
                 label="Score:"
-                min={0}
-                max={100000}
                 placeholder="0"
               />
 
@@ -190,12 +214,21 @@ const NewGameSelect = () => {
           text="Add Player"
           onClick={() => append({ name: "", id: "", score: 0 })}
         />
-        <SubmitButton onClick={handleSubmit(onSubmit)} />
-        {loading && <LoadingSpinner />}
-        {error && <ErrorSpan message={error.message} />}
+
+        <SubmitButton
+          onClick={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
+        />
+
+        {/* Loading & Error States */}
+        {(playersLoading || isSubmitting) && <LoadingSpinner />}
+
+        {playersError && <ErrorSpan message={`Could not load players: ${playersError.message}`} />}
+
+        {submitError && <ErrorSpan message={submitError} />}
       </div>
     </form>
   );
 };
 
-export default NewGameSelect;
+export default NewGameForm;
