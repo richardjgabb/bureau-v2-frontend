@@ -27,6 +27,7 @@ const GameSection = () => {
     const [showScoreboard, setShowScoreboard] = useState(false);
     const [showMomentum, setShowMomentum] = useState(false);
     const [showResultButtons, setShowResultButtons] = useState(false)
+    const [cachedScoreboard, setCachedScoreboard] = useState(state.data?.round ?? 0)
 
     const handleSubmit = async () => {
         if (!showResultButtons) {
@@ -61,8 +62,6 @@ const GameSection = () => {
         dispatch({ type: 'SET_LOADING', payload: false })
     }
 
-    console.log(state)
-
     return (
         <section className="flex flex-col gap-4 transition-all duration-300">
             <MainHeader text={state.data ? state.data.name : 'Game'} />
@@ -86,7 +85,7 @@ const GameSection = () => {
             </RowContainer>
             <p className="text-white/80 text-[10px] px-4">ⓘ Click card to assign deal</p></>}
             {showStats && <StatsModal setShowStats={setShowStats}/>}
-            {showScoreboard && <ScoreboardModal setShowScoreboard={setShowScoreboard}/>}
+            {showScoreboard && <ScoreboardModal cachedRound={cachedScoreboard} setCachedRound={setCachedScoreboard} setShowScoreboard={setShowScoreboard}/>}
             <RowContainer>
                 <SecondaryButton text={'Scoreboard'} onClick={() => {setShowScoreboard(!showScoreboard)}} type="button"/>
                 <SecondaryButton text={'Momentum'} onClick={() => {setShowMomentum(!showMomentum)}} type="button"/>
