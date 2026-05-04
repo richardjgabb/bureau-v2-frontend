@@ -61,6 +61,8 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
       return { ...state, data: action.payload, loading: false, error: null };
     case 'SET_SCOREBOARD':
       return { ...state, data: { ...state.data, scoreboard: action.payload}, loading: false, error: null };
+    case 'SET_STATS':
+      return { ...state, data: { ...state.data, stats: action.payload}, loading: false, error: null };
     case 'SET_ERROR':
       return { ...state, error: action.payload, loading: false }
     case 'SET_LOADING':

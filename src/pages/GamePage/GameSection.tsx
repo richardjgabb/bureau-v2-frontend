@@ -28,6 +28,7 @@ const GameSection = () => {
     const [showMomentum, setShowMomentum] = useState(false);
     const [showResultButtons, setShowResultButtons] = useState(false)
     const [cachedScoreboard, setCachedScoreboard] = useState(state.data?.round ?? 0)
+    const [cachedStats, setCachedStats] = useState(state.data?.round ?? 0)
 
     const handleSubmit = async () => {
         if (!showResultButtons) {
@@ -84,7 +85,7 @@ const GameSection = () => {
                 ))}
             </RowContainer>
             <p className="text-white/80 text-[10px] px-4">ⓘ Click card to assign deal</p></>}
-            {showStats && <StatsModal setShowStats={setShowStats}/>}
+            {showStats && <StatsModal cachedStats={cachedStats} setCachedStats={setCachedStats} setShowStats={setShowStats}/>}
             {showScoreboard && <ScoreboardModal cachedRound={cachedScoreboard} setCachedRound={setCachedScoreboard} setShowScoreboard={setShowScoreboard}/>}
             <RowContainer>
                 <SecondaryButton text={'Scoreboard'} onClick={() => {setShowScoreboard(!showScoreboard)}} type="button"/>
