@@ -12,12 +12,28 @@ import {
   import { useGameState } from "../../../pages/GamePage/useGameState";
 import OuterModal from "../../Molecules/OuterModal/OuterModal";
 import type { MomentumModalProps } from "./types";
+import { useEffect } from "react";
+import { fetchScoreboardData } from "../../../hooks/fetch/fetchScoreboard";
 
   // Register necessary Chart.js components
   ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-  const MomentumModal = ({ setShowMomentum }: MomentumModalProps) => {
-    const { state } = useGameState();
+  const MomentumModal = ({ setShowMomentum, cachedRound, setCachedRound }: MomentumModalProps) => {
+    const { state, dispatch } = useGameState();
+
+    const fetchData = async () => {
+        dispatch({ type: 'SET_LOADING', payload: true });
+        const result = await fetchScoreboardData(Number(state.data?.id));
+        dispatch({ type: 'SET_SCOREBOARD', payload: result });
+    }
+
+    useEffect(() => {
+        if (cachedRound === state.data?.round) {
+            return
+        }
+        fetchData();
+        setCachedRound(state.data?.round ?? 1);
+    }, [])
 
     const options = {
       responsive: true,
@@ -81,25 +97,18 @@ import type { MomentumModalProps } from "./types";
       },
     };
 
-    const createData = (player, pots) => {
+    const createData = (player, scoreboard) => {
       const data = [];
 
-      // Fill zeros for missing rounds
-      for (let i = 0; i < pots.length - player.scores.length; i++) {
-        if (!player.deleted) {
-          data.push(0);
-        }
-      }
-
       // Add player's actual scores
-      player.scores.forEach((score) => {
-        data.push(score.score);
+      scoreboard.forEach((round) => {
+        data.push(round.scores[player.id] ?? null);
       });
 
       return data;
     };
 
-    const createLabels = (pots = []) => pots.map((pot) => pot.round);
+    const createLabels = (scoreboard = []) => scoreboard.map((round) => round.round);
 
     const createDataSets = (players = []) => {
       const colors = [
@@ -117,7 +126,7 @@ import type { MomentumModalProps } from "./types";
 
       return players.map((player, i) => ({
         label: player.name,
-        data: createData(player, state.data?.pots ?? []),
+        data: createData(player, state.data?.scoreboard ?? []),
         borderColor: colors[i % colors.length],
         backgroundColor: colors[i % colors.length],
         tension: 0.3,
@@ -127,7 +136,7 @@ import type { MomentumModalProps } from "./types";
     };
 
     const data = {
-      labels: createLabels(state.data?.pots ?? []),
+      labels: createLabels(state.data?.scoreboard ?? []),
       datasets: createDataSets(Object.values(state.data?.players) ?? []),
     };
 

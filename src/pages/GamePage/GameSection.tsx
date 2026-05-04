@@ -96,7 +96,7 @@ const GameSection = () => {
                 <SubmitButton onClick={handleSubmit} />
                 <BackButton onClick={handleBackButton} />
             </RowContainer>}
-            {showMomentum && <MomentumModal setShowMomentum={setShowMomentum} />}
+            {showMomentum && <MomentumModal setShowMomentum={setShowMomentum} cachedRound={cachedScoreboard} setCachedRound={setCachedScoreboard}/>}
         </section>
     )
 }
