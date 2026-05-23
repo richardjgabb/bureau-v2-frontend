@@ -103,6 +103,8 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
           }
         }
       };
+      case 'REMOVE_PLAYER':
+        return { ...state, data: { ...state.data, players: action.payload } };
       case 'TOGGLE_FROZEN':
         return { ...state, data: state.data?.players.map((player) =>
           player.id === action.payload.id

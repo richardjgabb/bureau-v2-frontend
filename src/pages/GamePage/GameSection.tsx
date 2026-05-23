@@ -19,6 +19,7 @@ import SubmitButton from "../../components/Atoms/SubmitButton/SubmitButton"
 import ContentHeader from "../../components/Atoms/ContentHeader/ContentHeader"
 import ContentText from "../../components/Atoms/ContextText/ContextText"
 import { updateScores } from "../../hooks/updateScores"
+import EditGameModal from "../../components/Sections/EditGameModal/EditGameModal"
 
 const GameSection = () => {
 
@@ -90,7 +91,7 @@ const GameSection = () => {
             <RowContainer>
                 <SecondaryButton text={'Scoreboard'} onClick={() => {setShowScoreboard(!showScoreboard)}} type="button"/>
                 <SecondaryButton text={'Momentum'} onClick={() => {setShowMomentum(!showMomentum)}} type="button"/>
-                <SecondaryButton text={'Edit Game'} onClick={() => {}} type="button"/>
+                <EditGameModal />
                 <SecondaryButton text={'Stats'} onClick={() => setShowStats(!showStats)} type="button"/>
             </RowContainer>
             {!showStats &&<RowContainer>
