@@ -4,7 +4,7 @@ import type { OuterModalProps } from "./types"
 
 const OuterModal = ({ children, setShowModal }: OuterModalProps) => {
     return (
-        <div className="w-full h-full flex justify-center absolute p-4 bg-black fixed top-0 left-0 z-50">
+        <div className="w-full h-full flex justify-center absolute p-4 bg-black fixed top-0 left-0 z-50 overflow-y-scroll pb-4">
             <CloseButton setState={setShowModal} />
             {children}
         </div>

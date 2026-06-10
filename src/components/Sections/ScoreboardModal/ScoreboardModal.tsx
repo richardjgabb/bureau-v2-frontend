@@ -29,7 +29,7 @@ const ScoreboardModal = ({ cachedRound, setCachedRound, setShowScoreboard }: Sco
 
     return (
         <OuterModal setShowModal={() =>setShowScoreboard(false)}>
-            <section className="bg-white/40 p-4 rounded-lg w-full h-fit">
+            <section className="bg-white/40 p-4 rounded-lg w-full h-fit overflow-x-scroll">
                 {state.loading && <LoadingSpinner />}
                 {state.error && <ErrorSpan message={state.error} />}
                 {!(state.error) && <table className="w-full border-2 border-white/10">
@@ -46,7 +46,7 @@ const ScoreboardModal = ({ cachedRound, setCachedRound, setShowScoreboard }: Sco
                         {state.data?.scoreboard && Object.values(state.data?.scoreboard).map((round, index: number) => (
                             <tr className="text-white" key={'row' + index}>
                                 <ScoreboardData data={round.round} key={'round' + round.round} />
-                                {Object.keys(round.scores).map(player => (
+                                {Object.keys(state.data.players).map(player => (
                                     <ScoreboardData data={ round.scores[player] ? poundConversion(round.scores[player]) : '-' } key={'player_' + player + 'round_' + round.round} />
                                 ))}
                                 <ScoreboardData data={ poundConversion(round.pot) } key={'pot' + round.pot} />

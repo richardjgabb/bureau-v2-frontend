@@ -2,9 +2,9 @@ import AddIcon from "../Icons/AddIcon"
 import PrimaryButton from "../PrimaryButton/PrimaryButton"
 import type { AddButtonProps } from "./types"
 
-const AddButton = ({ onClick, text }: AddButtonProps) => {
+const AddButton = ({ onClick, text, type = 'submit' }: AddButtonProps) => {
     return (
-        <PrimaryButton text={text} onClick={onClick} type="submit" icon={<AddIcon />} />
+        <PrimaryButton text={text} onClick={onClick} type={type} icon={<AddIcon />} />
     )
 }
 export default AddButton

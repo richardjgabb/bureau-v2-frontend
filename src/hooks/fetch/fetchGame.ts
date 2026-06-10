@@ -1,0 +1,28 @@
+export const updateGameData = async (gameId: number, round: number, data: object) => {
+    const { game_name, buy_in, ...players } = data;
+
+    const obj = {
+    name: game_name,
+    buyIn: Number(buy_in),
+    round: Number(round),
+    players: Object.fromEntries(
+        Object.entries(players).map(([key, value]) =>  [Number(key), Number(value)])
+    )};
+
+    const response = await fetch(import.meta.env.VITE_API_URL + `games/${gameId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(obj),
+        // credentials: 'include',
+    });
+    if (!response.ok) {
+        let errMsg = 'Failed to update game data';
+        const errorData = await response.json();
+        if (errorData.message) {
+            errMsg = errorData.message;
+        }
+        throw new Error(errMsg, { cause: response.status });
+    }
+    const result = await response.json();
+    return result.data;
+};

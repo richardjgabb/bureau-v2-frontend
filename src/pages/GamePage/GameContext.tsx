@@ -105,12 +105,39 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
       };
       case 'REMOVE_PLAYER':
         return { ...state, data: { ...state.data, players: action.payload } };
+      case 'ADD_PLAYER':
+        console.log(action.payload);
+        return { ...state, data: { ...state.data, players: { ...state.data.players, [action.payload.id]: { id: action.payload.id, name: action.payload.name} } } };
       case 'TOGGLE_FROZEN':
         return { ...state, data: state.data?.players.map((player) =>
           player.id === action.payload.id
             ? { ...player, frozen: !player.frozen }
             : player
         ), };
+      case 'UPDATE_GAME': {
+        const updates = action.payload;
+
+        return {
+            ...state,
+            data: {
+                ...state.data,
+                name: updates.game_name,
+                buyIn: updates.buy_in,
+                players: {
+                    ...state.data.players,
+                    ...Object.entries(updates).reduce((acc, [id, score]) => {
+                        if (state.data.players[id]) {
+                            acc[id] = {
+                                ...state.data.players[id],
+                                current_score: score
+                            };
+                        }
+                        return acc;
+                    }, {})
+                }
+            }
+        };
+      }
     default:
       return state;
   }

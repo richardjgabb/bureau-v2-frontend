@@ -14,5 +14,6 @@
     --color-peach: #F4C59E;
     --color-mint: #DFEBC2;
     --color-success: #98C93C;
-    --color-error: #D95757;
+    --color-error: #ba3c3c;
+    --text-2xs: 8px;
 }

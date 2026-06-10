@@ -22,7 +22,7 @@ const EditGameModal = () => {
                 <OuterModal setShowModal={toggleModal}>
                     {state.loading && <LoadingSpinner />}
                     {state.error && <ErrorSpan message={state.error} />}
-                    <EditGameForm />
+                    <EditGameForm setShowModal={toggleModal}/>
                 </OuterModal>}
         </>
     )
