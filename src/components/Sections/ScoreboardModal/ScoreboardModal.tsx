@@ -47,7 +47,7 @@ const ScoreboardModal = ({ cachedRound, setCachedRound, setShowScoreboard }: Sco
                             <tr className="text-white" key={'row' + index}>
                                 <ScoreboardData data={round.round} key={'round' + round.round} />
                                 {Object.keys(state.data.players).map(player => (
-                                    <ScoreboardData data={ round.scores[player] ? poundConversion(round.scores[player]) : '-' } key={'player_' + player + 'round_' + round.round} />
+                                    <ScoreboardData data={ isNaN(round.scores[player]) ? '-' : poundConversion(round.scores[player]) } key={'player_' + player + 'round_' + round.round} />
                                 ))}
                                 <ScoreboardData data={ poundConversion(round.pot) } key={'pot' + round.pot} />
                             </tr>
