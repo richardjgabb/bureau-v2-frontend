@@ -17,13 +17,6 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
         data: {
           ...state.data,
           potWinnerId: action.payload,
-          players: {
-            ...state.data.players,
-            [action.payload]: {
-              ...state.data.players[action.payload],
-              result: 'win'
-            }
-          },
           buedIds: [...state.data.buedIds].filter((id) => id !== action.payload)
         }
       };
@@ -32,13 +25,6 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
         ...state,
         data: {
           ...state.data,
-          players: {
-            ...state.data.players,
-            [action.payload]: {
-              ...state.data.players[action.payload],
-              result: 'safe'
-            }
-          },
           buedIds: [...state.data.buedIds]?.filter((id) => id !== action.payload)
         }
       };
@@ -47,13 +33,6 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
         ...state,
         data: {
           ...state.data,
-          players: {
-            ...state.data.players,
-            [action.payload]: {
-              ...state.data.players[action.payload],
-              result: 'bued'
-            }
-          },
           buedIds: state.data.buedIds && state.data.buedIds.includes(action.payload) ? state.data.buedIds : [...(state.data.buedIds || []), action.payload]
         }
       };
@@ -70,11 +49,9 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
     case 'SET_LOADING':
       return { ...state, loading: action.payload }
     case 'RESET_ROUND':
-      return { ...state, data: { ...state.data, potWinnerId: null, dealerId: null }}
+      return { ...state, data: { ...state.data, potWinnerId: null, dealerId: null, buedIds: [], round: state.data.round + 1 }}
     case 'SET_PLAYERS':
       return { ...state, data: { ...state.data, players: action.payload }}
-    case 'SET_ALL_SAFE':
-        return { ...state, data: { ...state.data, players: action.payload }}
     case 'UPDATE_POT_SIZE':
         return { ...state, data: { ...state.data, currentPotSize: action.payload }}
     case 'SET_OUT':

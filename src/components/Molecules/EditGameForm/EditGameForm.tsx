@@ -5,7 +5,6 @@ import MainHeader from "../../Atoms/MainHeader/MainHeader";
 import BinButton from "../../Atoms/BinButton/BinButton";
 import { updateGameData } from "../../../hooks/fetch/fetchGame";
 import AvailablePlayersDropdown from "../../Atoms/AvailablePlayersDropdown/AvailablePlayersDropdown";
-import { useEffect } from "react";
 
 const EditGameForm = ({ setShowModal }) => {
 

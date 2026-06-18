@@ -33,7 +33,7 @@ export type GamePageAction =
     | {type: 'SET_DATA' | 'SET_SCOREBOARD' | 'SET_STATS' | 'REMOVE_PLAYER' | 'ADD_PLAYER' | 'UPDATE_GAME'; payload: object; }
     | {type: 'SET_ERROR'; payload: string; }
     | {type: 'SET_LOADING'; payload: boolean; }
-    | {type: 'SET_PLAYERS' | 'SET_ALL_SAFE'; payload: Player[]; }
+    | {type: 'SET_PLAYERS' ; payload: Player[]; }
     | {type: 'SET_OUT' | 'SET_IN' | 'TOGGLE_FROZEN'; payload: {id: number}; }
     | {type: 'RESET_ROUND'; }
 
