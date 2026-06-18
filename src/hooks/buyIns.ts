@@ -22,12 +22,12 @@ export const replaceBuyIns = (players, buyIn) => {
     );
 };
 
-export const updatePotSize = (currentSize, players, buyIn) => {
+export const updatePotSizeFromBuyIns = (currentSize, players, buyIn) => {
     const livePlayers = players.filter(player => !player.frozen);
     return currentSize + (livePlayers.length * buyIn);
 }
 
-export const replacePotSize = (currentSize, players, buyIn) => {
+export const replacePotSizeFromBuyIns = (currentSize, players, buyIn) => {
     const livePlayers = players.filter(player => !player.frozen);
     return currentSize - (livePlayers.length * buyIn);
 }

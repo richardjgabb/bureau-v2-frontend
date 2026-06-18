@@ -19,7 +19,7 @@ const ResultRadioButtons = ({ playerId  }: ResultRadioButtonsProps) => {
     const handleSafe = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
         e.stopPropagation()
         setSelected('Safe');
-        dispatch({ type: 'SET_BUED', payload: playerId });
+        dispatch({ type: 'SET_SAFE', payload: playerId });
     }
 
     const handleBued = (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => {

@@ -23,7 +23,8 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
               ...state.data.players[action.payload],
               result: 'win'
             }
-          }
+          },
+          buedIds: [...state.data.buedIds].filter((id) => id !== action.payload)
         }
       };
       case 'SET_SAFE':
@@ -37,7 +38,8 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
               ...state.data.players[action.payload],
               result: 'safe'
             }
-          }
+          },
+          buedIds: [...state.data.buedIds]?.filter((id) => id !== action.payload)
         }
       };
     case 'SET_BUED':
@@ -58,7 +60,7 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
     case 'SET_DEALER':
       return { ...state, data: { ...state.data, dealerId: action.payload }};
     case 'SET_DATA':
-      return { ...state, data: action.payload, loading: false, error: null };
+      return { ...state, data: { ...action.payload, buedIds: [], potWinnerId: null }, loading: false, error: null };
     case 'SET_SCOREBOARD':
       return { ...state, data: { ...state.data, scoreboard: action.payload}, loading: false, error: null };
     case 'SET_STATS':

@@ -14,3 +14,8 @@ export const updateScores = (players, currentPotSize) => {
         ])
     );
 }
+
+export const updatePotSize = (potSize: number, isWinner: boolean, amountOfBues: number) => {
+    const newPot = isWinner ? 0 : potSize
+    return amountOfBues > 0 ? newPot + (amountOfBues * potSize) : newPot;
+}

@@ -11,14 +11,14 @@ import { useGameState } from "./useGameState"
 import ScoreboardModal from "../../components/Sections/ScoreboardModal/ScoreboardModal"
 import MomentumModal from "../../components/Sections/MomentumModal/MomentumModal"
 import { postScore } from "../../hooks/fetch/fetchScore"
-import { replaceBuyIns, takeBuyIns, updatePotSize, replacePotSize } from "../../hooks/buyIns"
+import { replaceBuyIns, takeBuyIns, updatePotSizeFromBuyIns, replacePotSizeFromBuyIns } from "../../hooks/buyIns"
 import BackButton from "../../components/Atoms/BackButton/BackButton"
 import { postUndo } from "../../hooks/fetch/postUndo"
 import { setAllPlayersSafe } from "../../hooks/setPlayers"
 import SubmitButton from "../../components/Atoms/SubmitButton/SubmitButton"
 import ContentHeader from "../../components/Atoms/ContentHeader/ContentHeader"
 import ContentText from "../../components/Atoms/ContextText/ContextText"
-import { updateScores } from "../../hooks/updateScores"
+import { updatePotSize, updateScores } from "../../hooks/updateScores"
 import EditGameModal from "../../components/Sections/EditGameModal/EditGameModal"
 
 const GameSection = () => {
@@ -35,14 +35,16 @@ const GameSection = () => {
         if (!showResultButtons) {
             dispatch({ type: 'SET_PLAYERS', payload: takeBuyIns(state.data.players, state.data.buyIn) })
             dispatch({ type: 'SET_ALL_SAFE', payload: setAllPlayersSafe(state.data.players) })
-            dispatch({ type: 'UPDATE_POT_SIZE', payload: updatePotSize(state.data.currentPotSize, Object.values(state.data.players), state.data.buyIn) })
+            dispatch({ type: 'UPDATE_POT_SIZE', payload: updatePotSizeFromBuyIns(state.data.currentPotSize, Object.values(state.data.players), state.data.buyIn) })
             setShowResultButtons(true)
             return
         }
         dispatch({ type: 'SET_LOADING', payload: true })
         try {
-            dispatch({ type: 'UPDATE_SCORES', payload: updateScores(state.data.players, state.data?.currentPotSize) })
             postScore(state.data?.id, state.data)
+            dispatch({ type: 'UPDATE_SCORES', payload: updateScores(state.data.players, state.data?.currentPotSize) })
+            console.log(state.data)
+            dispatch({ type: 'UPDATE_POT_SIZE', payload: updatePotSize(state.data.currentPotSize, state.data.potWinnerId ? true : false, state.data.buedIds?.length ?? 0) })
             dispatch({ type: 'RESET_ROUND'})
             setShowResultButtons(false)
         } catch (err) {
@@ -55,7 +57,7 @@ const GameSection = () => {
     const handleBackButton = () => {
         if (showResultButtons) {
             dispatch({ type: 'SET_PLAYERS', payload: replaceBuyIns(state.data.players, state.data.buyIn) })
-            dispatch({ type: 'UPDATE_POT_SIZE', payload: replacePotSize(state.data.currentPotSize, Object.values(state.data.players), state.data.buyIn) })
+            dispatch({ type: 'UPDATE_POT_SIZE', payload: replacePotSizeFromBuyIns(state.data.currentPotSize, Object.values(state.data.players), state.data.buyIn) })
             setShowResultButtons(false)
             return
         }
