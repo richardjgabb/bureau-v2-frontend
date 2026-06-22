@@ -10,7 +10,7 @@ import type { Player } from "../../PropTypes"
 import { useGameState } from "./useGameState"
 import ScoreboardModal from "../../components/Sections/ScoreboardModal/ScoreboardModal"
 import MomentumModal from "../../components/Sections/MomentumModal/MomentumModal"
-import { postScore } from "../../hooks/fetch/fetchScore"
+import { fetchGameData, postScore } from "../../hooks/fetch/fetchScore"
 import { replaceBuyIns, takeBuyIns, updatePotSizeFromBuyIns, replacePotSizeFromBuyIns } from "../../hooks/buyIns"
 import BackButton from "../../components/Atoms/BackButton/BackButton"
 import { postUndo } from "../../hooks/fetch/postUndo"
@@ -41,9 +41,7 @@ const GameSection = () => {
         try {
             dispatch({ type: 'UPDATE_SCORES', payload: updateScores(state.data.players, state.data?.currentPotSize, state.data.potWinnerId, state.data.buedIds) })
             postScore(state.data?.id, state.data)
-            //TODO: update pot when compuls
             dispatch({ type: 'UPDATE_POT_SIZE', payload: updatePotSize(state.data.currentPotSize, state.data.potWinnerId ? true : false, state.data.buedIds?.length ?? 0) })
-            console.log(state.data)
             dispatch({ type: 'RESET_ROUND'})
             setShowResultButtons(false)
         } catch (err) {
@@ -53,15 +51,18 @@ const GameSection = () => {
         }
     }
 
-    const handleBackButton = () => {
+    const handleBackButton = async () => {
         if (showResultButtons) {
             dispatch({ type: 'SET_PLAYERS', payload: replaceBuyIns(state.data.players, state.data.buyIn) })
             dispatch({ type: 'UPDATE_POT_SIZE', payload: replacePotSizeFromBuyIns(state.data.currentPotSize, Object.values(state.data.players), state.data.buyIn) })
             setShowResultButtons(false)
             return
         }
+        //TODO: Add confirmation modal
         dispatch({ type: 'SET_LOADING', payload: true })
-        postUndo(state.data?.id, state.data.round - 1)
+        await postUndo(state.data?.id, state.data.round - 1)
+        const result = await fetchGameData(state.data?.id)
+        dispatch({ type: 'SET_DATA', payload: result })
         dispatch({ type: 'SET_LOADING', payload: false })
     }
 

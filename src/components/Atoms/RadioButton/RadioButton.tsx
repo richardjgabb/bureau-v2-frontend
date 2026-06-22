@@ -2,19 +2,30 @@ import { forwardRef } from "react"
 import ErrorSpan from "../ErrorSpan/ErrorSpan"
 import type { InputProps } from "./types"
 
-const RadioButton = forwardRef<HTMLInputElement, InputProps>(({ id, label, checked, errors, onClick, ...props }, ref) => {
+const RadioButton = forwardRef<HTMLInputElement, InputProps>(({ id, label, checked, disabled, errors, onClick, ...props }, ref) => {
 
     return (
-        <label htmlFor={id} className={`flex flex-col rounded-lg border items-center gap-2 justify-center cursor-pointer select-none px-1 py-2 w-[27%] ${
-                checked ? "bg-purple border-purple" : "bg-zinc-950 border-white/20"
-                }`}
-                onClick={onClick}>
-            <span className="font-medium text-md text-center">{ label }</span>
+        <label
+            htmlFor={id}
+            className={`flex flex-col rounded-lg border items-center gap-2 justify-center select-none px-1 py-2 w-[27%] transition-all duration-200
+                ${disabled
+                    ? "bg-zinc-900 border-zinc-800 opacity-40 cursor-not-allowed"
+                    : "cursor-pointer"
+                }
+                ${!disabled && checked ? "bg-purple border-purple" : ""}
+                ${!disabled && !checked ? "bg-zinc-950 border-white/20" : ""}
+            `}
+            onClick={disabled ? undefined : onClick}
+        >
+            <span className={`font-medium text-md text-center ${disabled ? "text-zinc-500" : "text-white"}`}>
+                { label }
+            </span>
             <input
                 id={id}
                 name={id}
                 type="radio"
                 checked={checked}
+                disabled={disabled}
                 readOnly
                 className="hidden"
                 ref={ref}
@@ -22,13 +33,15 @@ const RadioButton = forwardRef<HTMLInputElement, InputProps>(({ id, label, check
             />
             <div
                 className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all duration-300 ${
-                checked ? "bg-purple border-purple" : "border-white/60"
+                    disabled
+                        ? "border-zinc-700 bg-zinc-800"
+                        : checked ? "bg-purple border-purple" : "border-white/60"
                 }`}
             >
                 {checked && (
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="w-4 h-4 text-white"
+                    className={`w-4 h-4 ${disabled ? "text-zinc-500" : "text-white"}`}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"

@@ -49,7 +49,16 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
     case 'SET_LOADING':
       return { ...state, loading: action.payload }
     case 'RESET_ROUND':
-      return { ...state, data: { ...state.data, potWinnerId: null, dealerId: null, buedIds: [], round: state.data.round + 1 }}
+      return { ...state,
+        data: {
+          ...state.data,
+          players: Object.fromEntries(Object.entries(state.data.players).map(([id, player]) => [id, { ...player, isIn: true }])),
+          potWinnerId: null,
+          dealerId: null,
+          buedIds: [],
+          round: state.data.round + 1
+        }
+      }
     case 'SET_PLAYERS':
       return { ...state, data: { ...state.data, players: action.payload }}
     case 'UPDATE_POT_SIZE':
@@ -85,7 +94,6 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
       case 'REMOVE_PLAYER':
         return { ...state, data: { ...state.data, players: action.payload } };
       case 'ADD_PLAYER':
-        console.log(action.payload);
         return { ...state, data: { ...state.data, players: { ...state.data.players, [action.payload.id]: { id: action.payload.id, name: action.payload.name} } } };
       case 'TOGGLE_FROZEN':
         return { ...state, data: state.data?.players.map((player) =>
