@@ -9,6 +9,7 @@ import { poundConversion } from "../hooks/poundConversion"
 import PrimaryButton from "../components/Atoms/PrimaryButton/PrimaryButton"
 import { useState } from "react"
 import NewGameModal from "../components/Sections/NewGameModal/NewGameModal"
+import AddIcon from "../components/Atoms/Icons/AddIcon"
 
 const WelcomePage = () => {
 
@@ -20,6 +21,7 @@ const WelcomePage = () => {
                 <MainHeader text="Bureau"/>
                 {loading && <LoadingSpinner />}
                 {error && <ErrorSpan message={error.message} />}
+                <PrimaryButton text={'New Game'} onClick={ () => setNewGame(true)} type="button" icon={<AddIcon />}/>
                 {!newGame && <table className="w-full">
                     <tbody className="flex flex-col gap-2">
                         {data && data.data.map(game =>
@@ -39,7 +41,6 @@ const WelcomePage = () => {
                         )}
                     </tbody>
                 </table>}
-                <PrimaryButton text={'Create New Game'} onClick={ () => setNewGame(true)} type="button"/>
                 {newGame &&
                     <NewGameModal setShowModal={setNewGame} />
                 }
