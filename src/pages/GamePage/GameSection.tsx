@@ -12,7 +12,6 @@ import ScoreboardModal from "../../components/Sections/ScoreboardModal/Scoreboar
 import MomentumModal from "../../components/Sections/MomentumModal/MomentumModal"
 import { fetchGameData, postScore } from "../../hooks/fetch/fetchScore"
 import { replaceBuyIns, takeBuyIns, updatePotSizeFromBuyIns, replacePotSizeFromBuyIns } from "../../hooks/buyIns"
-import BackButton from "../../components/Atoms/BackButton/BackButton"
 import { postUndo } from "../../hooks/fetch/postUndo"
 import SubmitButton from "../../components/Atoms/SubmitButton/SubmitButton"
 import ContentHeader from "../../components/Atoms/ContentHeader/ContentHeader"
@@ -20,6 +19,8 @@ import ContentText from "../../components/Atoms/ContextText/ContextText"
 import { updatePotSize, updateScores } from "../../hooks/updateScores"
 import EditGameModal from "../../components/Sections/EditGameModal/EditGameModal"
 import ConfirmationModal from "../../components/Molecules/ConfirmationModal/ConfirmationModal"
+import TertiaryButton from "../../components/Atoms/TertiaryButton/TertiaryButton"
+import UndoIcon from "../../components/Atoms/Icons/UndoIcon"
 
 const GameSection = () => {
 
@@ -110,7 +111,7 @@ const GameSection = () => {
             </RowContainer>
             {!showStats &&<RowContainer>
                 <SubmitButton onClick={handleSubmit} />
-                <BackButton onClick={handleBackButton} />
+                <TertiaryButton text={'Undo'} type={'button'} icon={<UndoIcon />} onClick={handleBackButton} />
             </RowContainer>}
             {showMomentum && <MomentumModal setShowMomentum={setShowMomentum} cachedRound={cachedScoreboard} setCachedRound={setCachedScoreboard}/>}
         </section>

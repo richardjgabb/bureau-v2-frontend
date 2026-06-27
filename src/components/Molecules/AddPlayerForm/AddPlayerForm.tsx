@@ -4,6 +4,7 @@ import MainHeader from "../../Atoms/MainHeader/MainHeader";
 import { addNewPlayer } from "../../../hooks/fetch/fetchPlayers";
 import ErrorSpan from "../../Atoms/ErrorSpan/ErrorSpan";
 import LoadingSpinner from "../../Atoms/LoadingSpinner/LoadingSpinner";
+import InputLabel from "../../Atoms/InputLabel/InputLabel";
 
 const AddPlayerForm = ({ toggleModal }) => {
     const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm<{ name: string }>();
@@ -23,18 +24,19 @@ const AddPlayerForm = ({ toggleModal }) => {
 
     return (
         <form
-            className="flex flex-col h-fit gap-2 items-center bg-white/40 rounded-lg px-10 py-4 w-full"
+            className="flex flex-col h-fit gap-2 items-center bg-dark-gray rounded-lg px-10 py-4 w-full"
             onSubmit={handleSubmit(onSubmit)}
         >
             <MainHeader text="Add Player" />
-            <label className="text-white">Player Name:</label>
-
-            <input
-                className="w-full p-2 rounded-md text-white bg-white/20 border border-white/20"
-                type="text"
-                placeholder="Enter name..."
-                {...register("name", { required: "Player name is required" })}
-            />
+            <div className="flex flex-col gap-1 w-full">
+                <InputLabel htmlFor="name" label="Name:" />
+                <input
+                    className="w-full p-2 rounded-md bg-white/40 shadow-sm outline-none"
+                    type="text"
+                    placeholder="Enter name..."
+                    {...register("name", { required: "Player name is required" })}
+                />
+            </div>
 
             {isSubmitting && <LoadingSpinner />}
             {errors.name && <ErrorSpan message={errors.name.message} />}

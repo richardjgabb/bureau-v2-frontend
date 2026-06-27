@@ -14,7 +14,7 @@ const NumberInput = forwardRef<HTMLInputElement, InputProps>(({ id, label, place
                 ref={ref}
                 { ...props }
                 type="number"
-                className="w-20 px-3 py-2 bg-white/20 text-gray-300 border border-gray-300 rounded-lg outline-none"
+                className="w-20 px-3 py-2 bg-white/20 rounded-lg outline-none shadow-sm"
                 placeholder={placeholder}
                 max={max}
                 min={min}

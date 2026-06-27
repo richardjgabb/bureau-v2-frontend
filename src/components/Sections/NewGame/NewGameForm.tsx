@@ -5,9 +5,11 @@ import type { FormValues } from "./types.ts";
 import LoadingSpinner from "../../Atoms/LoadingSpinner/LoadingSpinner.tsx";
 import ErrorSpan from "../../Atoms/ErrorSpan/ErrorSpan.tsx";
 import NumberInput from "../../Atoms/NumberInput/NumberInput.tsx";
-import AddButton from "../../Atoms/AddButton/AddButton.tsx";
 import SubmitButton from "../../Atoms/SubmitButton/SubmitButton.tsx";
 import { useNavigate } from "react-router-dom";
+import InputLabel from "../../Atoms/InputLabel/InputLabel.tsx";
+import AddIcon from "../../Atoms/Icons/AddIcon.tsx";
+import TertiaryButton from "../../Atoms/TertiaryButton/TertiaryButton.tsx";
 
 const NewGameForm = () => {
   // 1. Hook for fetching existing players
@@ -90,15 +92,18 @@ const NewGameForm = () => {
     <form
       onSubmit={handleSubmit(onSubmit)}
       ref={containerRef}
-      className="flex flex-col gap-6 w-full max-w-md p-4"
+      className="flex flex-col gap-2 w-full max-w-md p-4"
     >
-      <input
-        {...register("gameName", { required: "Game name is required" })}
-        type="text"
-        autoComplete="off"
-        placeholder="Your game name..."
-        className="grow px-4 py-2 bg-white/20 placeholder:text-white/50 text-gray-300 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all shadow-sm"
-      />
+      <div className="flex flex-col gap-1">
+        <InputLabel label="Game name:" htmlFor="gameName" />
+        <input
+          {...register("gameName", { required: "Game name is required" })}
+          type="text"
+          autoComplete="off"
+          placeholder="Your game name..."
+          className="grow px-4 py-2 bg-white/20 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all shadow-sm"
+        />
+      </div>
 
       <NumberInput
         id="buyIn"
@@ -109,13 +114,14 @@ const NewGameForm = () => {
         placeholder="0"
       />
 
-      <p className="text-lg text-gray-100 m-0">Assign Players:</p>
+      <span className="border border-white/20 my-2 mx-4"></span>
 
       <div className="space-y-4">
         {fields.map((field, index) => (
           <div key={field.id} className="relative group">
             <div className="flex gap-2">
-              <div className="relative flex flex-1 gap-2">
+              <div className="relative flex flex-col flex-1 gap-1">
+                <InputLabel label="Name:" htmlFor={`players.${index}.name`} />
                 <input
                   {...register(`players.${index}.name` as const, {
                     required: true,
@@ -130,7 +136,7 @@ const NewGameForm = () => {
                   autoComplete="off"
                   onFocus={() => setActiveDropdown(index)}
                   placeholder="Type player name..."
-                  className="grow px-4 py-2 bg-white/20 placeholder:text-white/50 text-gray-300 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all shadow-sm"
+                  className="grow px-4 py-2 bg-white/20 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all shadow-sm"
                 />
 
                 {/* Visual state indicator */}
@@ -209,10 +215,12 @@ const NewGameForm = () => {
         ))}
       </div>
 
-      <div className="flex flex-col gap-2">
-        <AddButton
+      <div className="flex flex-col gap-2 items-center p-4">
+        <TertiaryButton
+          type="button"
           text="Add Player"
           onClick={() => append({ name: "", id: "", score: 0 })}
+          icon={<AddIcon />}
         />
 
         <SubmitButton
