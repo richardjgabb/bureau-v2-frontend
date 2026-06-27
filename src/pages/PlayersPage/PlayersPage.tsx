@@ -2,6 +2,7 @@ import ErrorSpan from "../../components/Atoms/ErrorSpan/ErrorSpan"
 import LoadingSpinner from "../../components/Atoms/LoadingSpinner/LoadingSpinner"
 import MainHeader from "../../components/Atoms/MainHeader/MainHeader"
 import TableRow from "../../components/Atoms/TableRow/TableRow"
+import AddPlayerModal from "../../components/Molecules/AddPlayerModal/AddPlayerModal"
 import { useFetch } from "../../hooks/useFetch"
 
 const PlayersPage = () => {
@@ -11,11 +12,12 @@ const PlayersPage = () => {
     const { data, error, loading } = useFetch<ApiResponse<PlayersData>>(playersURL)
 
     return (
-        <section className="flex flex-col gap-4">
+        <section className="flex flex-col gap-4 items-center w-full">
             <MainHeader text="Players"/>
             {loading && <LoadingSpinner />}
             {error && <ErrorSpan message={error.message} />}
-            <table>
+            <AddPlayerModal />
+            <table className="w-full">
                 <tbody className="flex flex-col gap-2">
                     {data && data.data.map(player =>
                             <TableRow key={player.name}>

@@ -19,6 +19,7 @@ import ContentHeader from "../../components/Atoms/ContentHeader/ContentHeader"
 import ContentText from "../../components/Atoms/ContextText/ContextText"
 import { updatePotSize, updateScores } from "../../hooks/updateScores"
 import EditGameModal from "../../components/Sections/EditGameModal/EditGameModal"
+import ConfirmationModal from "../../components/Molecules/ConfirmationModal/ConfirmationModal"
 
 const GameSection = () => {
 
@@ -27,6 +28,7 @@ const GameSection = () => {
     const [showScoreboard, setShowScoreboard] = useState(false);
     const [showMomentum, setShowMomentum] = useState(false);
     const [showResultButtons, setShowResultButtons] = useState(false)
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false)
     const [cachedScoreboard, setCachedScoreboard] = useState(state.data?.round ?? 0)
     const [cachedStats, setCachedStats] = useState(state.data?.round ?? 0)
 
@@ -58,16 +60,26 @@ const GameSection = () => {
             setShowResultButtons(false)
             return
         }
-        //TODO: Add confirmation modal
+        setShowConfirmationModal(true)
+    }
+
+    const undoRound = async () => {
         dispatch({ type: 'SET_LOADING', payload: true })
-        await postUndo(state.data?.id, state.data.round - 1)
-        const result = await fetchGameData(state.data?.id)
-        dispatch({ type: 'SET_DATA', payload: result })
-        dispatch({ type: 'SET_LOADING', payload: false })
+        try {
+            await postUndo(state.data?.id, state.data.round - 1)
+            const result = await fetchGameData(state.data?.id)
+            dispatch({ type: 'SET_DATA', payload: result })
+            setShowConfirmationModal(false)
+        } catch (err) {
+            dispatch({ type: 'SET_ERROR', payload: err instanceof Error ? err.message : "An unknown error occurred" })
+        } finally {
+            dispatch({ type: 'SET_LOADING', payload: false })
+        }
     }
 
     return (
         <section className="flex flex-col gap-4 transition-all duration-300">
+            {showConfirmationModal && <ConfirmationModal action={undoRound} setShowConfirmationModal={setShowConfirmationModal} confirmText={'Undo Round'} />}
             <MainHeader text={state.data ? state.data.name : 'Game'} />
             {state.loading && <LoadingSpinner />}
             {state.error && <ErrorSpan message={state.error} />}
@@ -93,8 +105,8 @@ const GameSection = () => {
             <RowContainer>
                 <SecondaryButton text={'Scoreboard'} onClick={() => {setShowScoreboard(!showScoreboard)}} type="button"/>
                 <SecondaryButton text={'Momentum'} onClick={() => {setShowMomentum(!showMomentum)}} type="button"/>
-                <EditGameModal />
                 <SecondaryButton text={'Stats'} onClick={() => setShowStats(!showStats)} type="button"/>
+                <EditGameModal />
             </RowContainer>
             {!showStats &&<RowContainer>
                 <SubmitButton onClick={handleSubmit} />
