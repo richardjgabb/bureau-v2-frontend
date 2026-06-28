@@ -21,6 +21,7 @@ import EditGameModal from "../../components/Sections/EditGameModal/EditGameModal
 import ConfirmationModal from "../../components/Molecules/ConfirmationModal/ConfirmationModal"
 import TertiaryButton from "../../components/Atoms/TertiaryButton/TertiaryButton"
 import UndoIcon from "../../components/Atoms/Icons/UndoIcon"
+import InfoText from "../../components/Atoms/InfoText/InfoText"
 
 const GameSection = () => {
 
@@ -100,7 +101,11 @@ const GameSection = () => {
                     />
                 ))}
             </RowContainer>
-            <p className="text-white/80 text-[10px] px-4">ⓘ Click card to assign deal</p></>}
+            <div className="flex gap-1 flex-col">
+                <InfoText text="Click card to assign deal" />
+                <InfoText text="You can only freeze/unfreeze on compulsory hands" />
+            </div>
+            </>}
             {showStats && <StatsModal cachedStats={cachedStats} setCachedStats={setCachedStats} setShowStats={setShowStats}/>}
             {showScoreboard && <ScoreboardModal cachedRound={cachedScoreboard} setCachedRound={setCachedScoreboard} setShowScoreboard={setShowScoreboard}/>}
             <RowContainer>

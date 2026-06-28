@@ -139,15 +139,6 @@ const NewGameForm = () => {
                   className="grow px-4 py-2 bg-white/20 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all shadow-sm"
                 />
 
-                {/* Visual state indicator */}
-                <div className="absolute right-10 top-1/2 -translate-y-1/2 pointer-events-none">
-                  {watchedPlayers[index].id ? (
-                    <span className="text-[10px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded border border-green-500/30">Existing</span>
-                  ) : watchedPlayers[index].name ? (
-                    <span className="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded border border-blue-500/30">New</span>
-                  ) : null}
-                </div>
-
                 <input type="hidden" {...register(`players.${index}.id` as const)} />
 
                 {activeDropdown === index && data && (
@@ -176,19 +167,6 @@ const NewGameForm = () => {
                       </li>
                   </ul>
                 )}
-
-                {watchedPlayers[index].name?.length > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setValue(`players.${index}.name`, "");
-                      setValue(`players.${index}.id`, "");
-                    }}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-red-400 p-1"
-                  >
-                    ✕
-                  </button>
-                )}
               </div>
 
               <NumberInput
@@ -205,7 +183,7 @@ const NewGameForm = () => {
                 <button
                   type="button"
                   onClick={() => remove(index)}
-                  className="p-2 text-gray-400 hover:text-red-500 text-xl"
+                  className="h-fit self-end p-2 text-gray-400 hover:text-red-500 text-xl"
                 >
                   ✕
                 </button>

@@ -30,11 +30,11 @@ export interface GamePageState {
 
 export type GamePageAction =
     | {type: 'SET_POT_WINNER' | 'SET_DEALER' | 'SET_SAFE' |'SET_BUED' | 'UPDATE_POT_SIZE'; payload: number; }
-    | {type: 'SET_DATA' | 'SET_SCOREBOARD' | 'SET_STATS' | 'REMOVE_PLAYER' | 'ADD_PLAYER' | 'UPDATE_GAME'; payload: object; }
+    | {type: 'SET_DATA' | 'SET_FROZEN' | 'SET_SCOREBOARD' | 'SET_STATS' | 'REMOVE_PLAYER' | 'ADD_PLAYER' | 'UPDATE_GAME'; payload: object; }
     | {type: 'SET_ERROR'; payload: string; }
     | {type: 'SET_LOADING'; payload: boolean; }
     | {type: 'SET_PLAYERS' ; payload: Player[]; }
-    | {type: 'SET_OUT' | 'SET_IN' | 'TOGGLE_FROZEN'; payload: {id: number}; }
+    | {type: 'SET_OUT' | 'SET_IN'; payload: {id: number}; }
     | {type: 'RESET_ROUND'; }
 
 export interface GameProviderProps {

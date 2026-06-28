@@ -6,6 +6,8 @@ import ResultRadioButtons from "../ResultRadioButtons/ResultRadioButtons"
 import type { PlayerCardProps } from "./types"
 import { useGameState } from "../../../pages/GamePage/useGameState"
 import InOutRadioButtons from "../InOutRadioButtons/InOutRadioButtons"
+import PauseButton from "../../Atoms/PauseButton/PauseButton"
+import FrozenPlayerCard from "../FrozenPlayerCard/FrozenPlayerCard"
 
 const PlayerCard = ({ playerName, playerId, playerScore, showResultButtons }: PlayerCardProps) => {
 
@@ -15,12 +17,17 @@ const PlayerCard = ({ playerName, playerId, playerScore, showResultButtons }: Pl
         dispatch({ type: 'SET_DEALER', payload: playerId });
     }
 
+    const playerFrozen = state.data.players?.[playerId]?.isFrozen
+
     return (
-        <div onClick={handleClick}
+        <>
+        {playerFrozen && <FrozenPlayerCard playerName={playerName} playerId={playerId} />}
+        {!playerFrozen && <div onClick={handleClick}
             className={(state.data.dealerId === playerId ? "bg-dark-blue " : "") + "rounded-xl hover:cursor-pointer relative"}
         >
             <ContentCardMedium>
                 {state.data.dealerId === playerId && <DealIcon />}
+                <PauseButton playerId={playerId} />
                 <div className="flex flex-col">
                     <ContentHeader text={playerName}/>
                     <ContentText text={`£${(playerScore/100).toFixed(2).toString()}`} />
@@ -28,7 +35,8 @@ const PlayerCard = ({ playerName, playerId, playerScore, showResultButtons }: Pl
                 {!showResultButtons && <InOutRadioButtons playerId={playerId}/>}
                 {showResultButtons && <ResultRadioButtons playerId={playerId} />}
             </ContentCardMedium>
-        </div>
+        </div>}
+        </>
     )
 }
 

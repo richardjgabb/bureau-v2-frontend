@@ -15,3 +15,16 @@ export const updatePlayerScores = (
     ])
   )
 }
+
+export const setPlayerFrozen = (
+  players: Record<number, Player>,
+  playerId: number,
+  isFrozen: boolean
+): Record<number, Player> => {
+  return Object.fromEntries(
+    Object.entries(players).map(([key, player]) => [
+      Number(key),
+      Number(key) === playerId ? { ...player, isFrozen: isFrozen } : player,
+    ])
+  )
+}

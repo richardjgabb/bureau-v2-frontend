@@ -95,12 +95,8 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
         return { ...state, data: { ...state.data, players: action.payload } };
       case 'ADD_PLAYER':
         return { ...state, data: { ...state.data, players: { ...state.data.players, [action.payload.id]: { id: action.payload.id, name: action.payload.name} } } };
-      case 'TOGGLE_FROZEN':
-        return { ...state, data: state.data?.players.map((player) =>
-          player.id === action.payload.id
-            ? { ...player, frozen: !player.frozen }
-            : player
-        ), };
+      case 'SET_FROZEN':
+        return { ...state, data: { ...state.data, players: action.payload } };
       case 'UPDATE_GAME': {
         const updates = action.payload;
 
