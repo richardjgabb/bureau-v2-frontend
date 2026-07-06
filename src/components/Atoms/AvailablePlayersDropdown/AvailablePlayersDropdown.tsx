@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AddButton from "../AddButton/AddButton";
 import { useAvailablePlayers } from "../../../hooks/useAvailablePlayers";
 import { useGameState } from "../../../pages/GamePage/useGameState";
