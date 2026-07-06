@@ -83,7 +83,7 @@ const EditGameForm = ({ setShowModal }) => {
                 <div className="flex items-center justify-center">
                     <AvailablePlayersDropdown />
                 </div>
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center pb-8">
                     <PrimaryButton type="submit" text="Save changes"/>
                 </div>
             </div>

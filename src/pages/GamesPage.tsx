@@ -11,14 +11,14 @@ import { useState } from "react"
 import NewGameModal from "../components/Sections/NewGameModal/NewGameModal"
 import AddIcon from "../components/Atoms/Icons/AddIcon"
 
-const WelcomePage = () => {
+const GamesPage = () => {
 
     const { data, error, loading } = useFetch<ApiResponse<GamesData>>(import.meta.env.VITE_API_URL + 'games')
     const [newGame, setNewGame] = useState(false)
 
     return (
             <section className="flex flex-col gap-4 items-center">
-                <MainHeader text="Bureau"/>
+                <MainHeader text="Games"/>
                 {loading && <LoadingSpinner />}
                 {error && <ErrorSpan message={error.message} />}
                 <PrimaryButton text={'New Game'} onClick={ () => setNewGame(true)} type="button" icon={<AddIcon />}/>
@@ -48,4 +48,4 @@ const WelcomePage = () => {
     )
 }
 
-export default WelcomePage
+export default GamesPage

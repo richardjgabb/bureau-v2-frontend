@@ -108,17 +108,17 @@ const GameSection = () => {
             </>}
             {showStats && <StatsModal cachedStats={cachedStats} setCachedStats={setCachedStats} setShowStats={setShowStats}/>}
             {showScoreboard && <ScoreboardModal cachedRound={cachedScoreboard} setCachedRound={setCachedScoreboard} setShowScoreboard={setShowScoreboard}/>}
-            <RowContainer>
-                <SecondaryButton text={'Scoreboard'} onClick={() => {setShowScoreboard(!showScoreboard)}} type="button"/>
-                <SecondaryButton text={'Momentum'} onClick={() => {setShowMomentum(!showMomentum)}} type="button"/>
-                <SecondaryButton text={'Stats'} onClick={() => setShowStats(!showStats)} type="button"/>
-                <EditGameModal />
-            </RowContainer>
             {!showStats &&<RowContainer>
                 <SubmitButton onClick={handleSubmit} />
                 <TertiaryButton text={'Undo'} type={'button'} icon={<UndoIcon />} onClick={handleBackButton} />
             </RowContainer>}
             {showMomentum && <MomentumModal setShowMomentum={setShowMomentum} cachedRound={cachedScoreboard} setCachedRound={setCachedScoreboard}/>}
+            <div className="flex flex-wrap justify-center gap-2 px-4">
+                <SecondaryButton text={'Scoreboard'} onClick={() => {setShowScoreboard(!showScoreboard)}} type="button"/>
+                <SecondaryButton text={'Momentum'} onClick={() => {setShowMomentum(!showMomentum)}} type="button"/>
+                <SecondaryButton text={'Stats'} onClick={() => setShowStats(!showStats)} type="button"/>
+                <EditGameModal />
+            </div>
         </section>
     )
 }

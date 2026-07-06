@@ -1,9 +1,8 @@
 import { useState } from "react";
-import AddButton from "../AddButton/AddButton";
 import { useAvailablePlayers } from "../../../hooks/useAvailablePlayers";
 import { useGameState } from "../../../pages/GamePage/useGameState";
-import TableRow from "../TableRow/TableRow";
-import PrimaryButton from "../PrimaryButton/PrimaryButton";
+import AddIcon from "../Icons/AddIcon";
+import SecondaryButton from "../SecondaryButton/SecondaryButton";
 
 const AvailablePlayersDropdown = () => {
 
@@ -22,21 +21,21 @@ const AvailablePlayersDropdown = () => {
     }
 
     return (
-        <div className="flex flex-col items-center gap-2">
-            { showDropdown ? <PrimaryButton text="- Close" onClick={toggleDropdown} type='button' /> :
-                <AddButton text="Add player" onClick={toggleDropdown} type='button'/>
+        <div className="flex flex-col items-center gap-2 w-full">
+            { showDropdown ? <SecondaryButton text="^" onClick={toggleDropdown} type='button' /> :
+                <SecondaryButton text="+ Add existing player" onClick={toggleDropdown} type='button'/>
             }
-            <table>
-                <tbody className="flex flex-col gap-2">
-                {showDropdown && availablePlayers.map(player =>
-                    <TableRow key={player.id}>
-                        <td>
-                            <button onClick={() => handleAddPlayer(player)} type="button">
+            <table className=" min-w-[200px]">
+                <tbody className="flex flex-col items-center bg-dark-gray rounded">
+                {showDropdown && availablePlayers.map((player, index) =>
+                    <tr key={player.id} className={"w-full px-4 py-2 shadow-md " + (index !== availablePlayers.length - 1 ? "border-b border-light-gray" : "")}>
+                        <td className="w-full flex justify-center text-xl text-light-gray">
+                            <button onClick={() => handleAddPlayer(player)} type="button" className="flex items-center gap-2">
+                                <AddIcon />
                                 {player.name}
-                                {player.id}
                             </button>
                         </td>
-                    </TableRow>
+                    </tr>
                 )}
                 </tbody>
             </table>

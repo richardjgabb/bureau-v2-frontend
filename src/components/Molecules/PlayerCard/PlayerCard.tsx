@@ -23,7 +23,7 @@ const PlayerCard = ({ playerName, playerId, playerScore, showResultButtons }: Pl
         <>
         {playerFrozen && <FrozenPlayerCard playerName={playerName} playerId={playerId} />}
         {!playerFrozen && <div onClick={handleClick}
-            className={(state.data.dealerId === playerId ? "bg-dark-blue " : "") + "rounded-xl hover:cursor-pointer relative"}
+            className={(state.data.dealerId === playerId ? "bg-dark-blue " : "bg-white/10 ") + "rounded-xl hover:cursor-pointer relative"}
         >
             <ContentCardMedium>
                 {state.data.dealerId === playerId && <DealIcon />}
