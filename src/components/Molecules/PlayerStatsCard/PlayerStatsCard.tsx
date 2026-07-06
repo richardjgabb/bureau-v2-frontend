@@ -4,7 +4,7 @@ import type { PlayerStatsCardProps } from "./types"
 
 const PlayerStatsCard = ({ name, stats }: PlayerStatsCardProps) => {
     return (
-            <div className="flex flex-col bg-dark-blue px-6 py-4 rounded-xl">
+            <div className="flex flex-col bg-dark-blue px-6 py-4 rounded-xl min-w-[215px]">
                 <ContentHeader text={name}/>
                 {stats && Object.keys(stats).map(statKey => (
                     <div key={statKey} className="flex flex-row justify-between gap-4">
@@ -13,7 +13,7 @@ const PlayerStatsCard = ({ name, stats }: PlayerStatsCardProps) => {
                     </div>
                 ))
                 }
-                </div>
+            </div>
     )
 }
 export default PlayerStatsCard

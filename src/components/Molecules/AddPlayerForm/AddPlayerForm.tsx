@@ -28,7 +28,7 @@ const AddPlayerForm = ({ toggleModal }) => {
             onSubmit={handleSubmit(onSubmit)}
         >
             <MainHeader text="Add Player" />
-            <div className="flex flex-col gap-1 w-full">
+            <div className="flex flex-col gap-1 w-full max-w-md">
                 <InputLabel htmlFor="name" label="Name:" />
                 <input
                     className="w-full p-2 rounded-md bg-white/40 shadow-sm outline-none"
