@@ -11,7 +11,7 @@ const EditGameForm = ({ setShowModal }) => {
 
     const { state, dispatch } = useGameState();
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, unregister, formState: { errors } } = useForm();
 
     const onSubmit = async (data) => {
         dispatch({ type: 'SET_LOADING', payload: true });
@@ -31,6 +31,12 @@ const EditGameForm = ({ setShowModal }) => {
         const { [id]: deleted, ...remaining } = state.data.players;
         return remaining;
     }
+
+    const handleRemovePlayer = (playerId: string) => {
+        unregister(playerId.toString());
+
+        dispatch({ type: 'REMOVE_PLAYER', payload: removePlayer(playerId) });
+    };
 
     return (
         <form className="w-full bg-dark-gray rounded-lg p-4" onSubmit={handleSubmit(onSubmit)}>
@@ -65,7 +71,7 @@ const EditGameForm = ({ setShowModal }) => {
                     <div key={player.id}>
                         <div className="flex flex-row p-1 w-[100%] gap-2 justify-between items-center">
                             <div className="flex flex-row gap-3 flex-grow items-center">
-                                <BinButton onClick={() => dispatch({ type: 'REMOVE_PLAYER', payload: removePlayer(player.id) })}
+                                <BinButton onClick={() => handleRemovePlayer(player.id)}
                                     disabled={false}
                                 />
                                 <p className="text-xl text-light-gray">{player.name}</p>
