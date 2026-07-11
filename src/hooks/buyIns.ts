@@ -16,7 +16,8 @@ export const replaceBuyIns = (players, buyIn) => {
             Number(key),
             player.isFrozen ? player : {
                 ...player,
-                current_score: player.current_score += buyIn
+                current_score: player.current_score += buyIn,
+                isIn: true
             }
         ])
     );

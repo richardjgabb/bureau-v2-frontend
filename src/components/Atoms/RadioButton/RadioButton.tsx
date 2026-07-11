@@ -7,13 +7,13 @@ const RadioButton = forwardRef<HTMLInputElement, InputProps>(({ id, label, check
     return (
         <label
             htmlFor={id}
-            className={`flex flex-col rounded-lg border items-center gap-2 justify-center select-none px-1 py-2 w-[27%] transition-all duration-200
+            className={`flex flex-col rounded-lg border items-center gap-2 justify-center select-none text-xs px-1 py-2 w-[29%] transition-all duration-200
                 ${disabled
                     ? "bg-zinc-900 border-zinc-800 opacity-40 cursor-not-allowed"
                     : "cursor-pointer"
                 }
                 ${!disabled && checked ? "bg-purple border-purple" : ""}
-                ${!disabled && !checked ? "bg-zinc-950 border-white/20" : ""}
+                ${!disabled && !checked ? "bg-dark-gray border-white/20" : ""}
             `}
             onClick={disabled ? undefined : onClick}
         >

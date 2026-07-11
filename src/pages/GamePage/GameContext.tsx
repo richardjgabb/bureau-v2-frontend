@@ -37,7 +37,7 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
         }
       };
     case 'SET_DEALER':
-      return { ...state, data: { ...state.data, dealerId: action.payload }};
+      return { ...state, data: { ...state.data, dealerId: state.data.dealerId === action.payload ? null : action.payload }};
     case 'SET_DATA':
       return { ...state, data: { ...action.payload, buedIds: [], potWinnerId: null }, loading: false, error: null };
     case 'SET_SCOREBOARD':

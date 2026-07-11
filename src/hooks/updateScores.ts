@@ -21,3 +21,8 @@ export const updatePotSize = (potSize: number, isWinner: boolean, amountOfBues: 
     const newPot = isWinner ? 0 : potSize
     return amountOfBues > 0 ? newPot + (amountOfBues * potSize) : newPot;
 }
+
+export const isRoundCompuls = (pot: number, buyIn: number, amountOfPlayersIn: number) => {
+    console.log('Pot = ' + pot + ' buyIn = ' + buyIn + ' amountOfPlayersIn = ' + amountOfPlayersIn)
+    return pot <= (buyIn * amountOfPlayersIn);
+}

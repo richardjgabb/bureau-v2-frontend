@@ -35,6 +35,7 @@ export type GamePageAction =
     | {type: 'SET_LOADING'; payload: boolean; }
     | {type: 'SET_PLAYERS' ; payload: Player[]; }
     | {type: 'SET_OUT' | 'SET_IN'; payload: {id: number}; }
+    | {type: 'IS_ROUND_COMPULS'; }
     | {type: 'RESET_ROUND'; }
 
 export interface GameProviderProps {
