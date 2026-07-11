@@ -7,27 +7,48 @@ import LoadingSpinner from "../components/Atoms/LoadingSpinner/LoadingSpinner"
 import ErrorSpan from "../components/Atoms/ErrorSpan/ErrorSpan"
 import { poundConversion } from "../hooks/poundConversion"
 import PrimaryButton from "../components/Atoms/PrimaryButton/PrimaryButton"
-import { useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import NewGameModal from "../components/Sections/NewGameModal/NewGameModal"
 import AddIcon from "../components/Atoms/Icons/AddIcon"
+import { BureauContext } from "../Context/BureauProvider"
+import { Link } from "react-router-dom"
+import { fetchAllGames } from "../hooks/fetch/fetchGame"
 
 const GamesPage = () => {
 
-    const { data, error, loading } = useFetch<ApiResponse<GamesData>>(import.meta.env.VITE_API_URL + 'games')
     const [newGame, setNewGame] = useState(false)
+    const { state, dispatch } = useContext(BureauContext);
+
+    const fetchGames = async () => {
+        dispatch({ type: 'SET_LOADING', payload: true });
+        try {
+            const result = await fetchAllGames();
+            dispatch({ type: 'SET_GAMES', payload: result });
+        } catch (err) {
+            dispatch({ type: 'SET_ERROR', payload: err.message });
+        } finally {
+            dispatch({ type: 'SET_LOADING', payload: false });
+        }
+    }
+
+    useEffect(() => {
+        if (!state.games) {
+            fetchGames();
+        }
+    }, [state.games])
 
     return (
             <section className="flex flex-col gap-4 items-center">
                 <MainHeader text="Games"/>
-                {loading && <LoadingSpinner />}
-                {error && <ErrorSpan message={error.message} />}
+                {state.loading && <LoadingSpinner />}
+                {state.error && <ErrorSpan message={state.error} />}
                 <PrimaryButton text={'New Game'} onClick={ () => setNewGame(true)} type="button" icon={<AddIcon />}/>
                 {!newGame && <table className="w-full">
                     <tbody className="flex flex-col gap-2">
-                        {data && data.data.map(game =>
+                        {state.games && state.games.map(game =>
                                 <TableRow key={game.name}>
                                     <td className="w-full h-full flex items-center">
-                                        <a className="hover:cursor-pointer flex items-center justify-between w-full h-full" href={`/games/${game.id}`}>
+                                        <Link className="hover:cursor-pointer flex items-center justify-between w-full h-full" to={`/games/${game.id}`}>
                                             <div>
                                                 <p>{game.name}</p>
                                             </div>
@@ -35,7 +56,7 @@ const GamesPage = () => {
                                                 <p>Current Pot: {poundConversion(game.current_pot)}</p>
                                                 <p>Buy In: {poundConversion(game.buy_in)}</p>
                                             </div>
-                                        </a>
+                                        </Link>
                                     </td>
                                 </TableRow>
                         )}

@@ -1,6 +1,5 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { useFetch } from "../../../hooks/useFetch.ts";
 import type { FormValues } from "./types.ts";
 import LoadingSpinner from "../../Atoms/LoadingSpinner/LoadingSpinner.tsx";
 import ErrorSpan from "../../Atoms/ErrorSpan/ErrorSpan.tsx";
@@ -10,10 +9,30 @@ import { useNavigate } from "react-router-dom";
 import InputLabel from "../../Atoms/InputLabel/InputLabel.tsx";
 import AddIcon from "../../Atoms/Icons/AddIcon.tsx";
 import TertiaryButton from "../../Atoms/TertiaryButton/TertiaryButton.tsx";
+import { BureauContext } from "../../../Context/BureauProvider.tsx";
+import { fetchAllPlayers } from "../../../hooks/fetch/fetchPlayers.ts";
 
 const NewGameForm = () => {
   // 1. Hook for fetching existing players
-  const { data, loading: playersLoading, error: playersError } = useFetch(import.meta.env.VITE_API_URL + 'players');
+  const { state, dispatch } = useContext(BureauContext)
+
+  const fetchPlayers = async () => {
+    try {
+      dispatch({ type: 'SET_LOADING', payload: true });
+      const result = await fetchAllPlayers();
+      dispatch({ type: 'SET_PLAYERS', payload: result });
+    } catch (err) {
+      dispatch({ type: 'SET_ERROR', payload: err.message });
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
+  }
+
+  useEffect(() => {
+    if (!state.players) {
+      fetchPlayers()
+    }
+  }, [state.players])
 
   // 2. Local states for the Submission process
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -74,11 +93,10 @@ const NewGameForm = () => {
       const result = await response.json();
 
       if (!response.ok) {
-        // Capture specific backend error messages (e.g., "Database connection failed")
         throw new Error(result.message || 'Failed to save the game');
       }
+      dispatch({ type: 'ADD_GAME', payload: result.data });
 
-      // Successful redirect using the ID returned by MySQL
       navigate(`/games/${result.data.id}`);
     } catch (err) {
       console.error("Submission error:", err);
@@ -119,7 +137,7 @@ const NewGameForm = () => {
       <div className="space-y-4">
         {fields.map((field, index) => (
           <div key={field.id} className="relative group">
-            <div className="flex gap-2">
+            <div className="flex gap-1">
               <div className="relative flex flex-col flex-1 gap-1">
                 <InputLabel label="Name:" htmlFor={`players.${index}.name`} />
                 <input
@@ -141,9 +159,9 @@ const NewGameForm = () => {
 
                 <input type="hidden" {...register(`players.${index}.id` as const)} />
 
-                {activeDropdown === index && data && (
+                {activeDropdown === index && state.players && (
                   <ul className="absolute z-20 top-full w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl max-h-48 overflow-y-auto py-1">
-                    {data?.data
+                    {state.players
                       .filter(p =>
                         p.name.toLowerCase().includes(watchedPlayers[index].name.toLowerCase()) &&
                         !watchedPlayers.some((sp, i) => i !== index && sp.id === p.id)
@@ -183,7 +201,7 @@ const NewGameForm = () => {
                 <button
                   type="button"
                   onClick={() => remove(index)}
-                  className="h-fit self-end p-2 text-gray-400 hover:text-red-500 text-xl"
+                  className="h-fit self-end py-2 px-1 text-gray-400 hover:text-red-500 text-xl"
                 >
                   ✕
                 </button>
@@ -207,9 +225,9 @@ const NewGameForm = () => {
         />
 
         {/* Loading & Error States */}
-        {(playersLoading || isSubmitting) && <LoadingSpinner />}
+        {(state.loading || isSubmitting) && <LoadingSpinner />}
 
-        {playersError && <ErrorSpan message={`Could not load players: ${playersError.message}`} />}
+        {state.error && <ErrorSpan message={`Could not load players: ${state.error}`} />}
 
         {submitError && <ErrorSpan message={submitError} />}
       </div>

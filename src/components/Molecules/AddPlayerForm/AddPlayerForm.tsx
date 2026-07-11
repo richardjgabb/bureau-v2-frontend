@@ -5,13 +5,19 @@ import { addNewPlayer } from "../../../hooks/fetch/fetchPlayers";
 import ErrorSpan from "../../Atoms/ErrorSpan/ErrorSpan";
 import LoadingSpinner from "../../Atoms/LoadingSpinner/LoadingSpinner";
 import InputLabel from "../../Atoms/InputLabel/InputLabel";
+import { useContext } from "react";
+import { BureauContext } from "../../../Context/BureauProvider";
 
 const AddPlayerForm = ({ toggleModal }) => {
     const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm<{ name: string }>();
+    const { state, dispatch } = useContext(BureauContext);
 
     const onSubmit = async (data: { name: string }) => {
         try {
-            await addNewPlayer(data);
+            const result = await addNewPlayer(data);
+            dispatch({
+                type: "ADD_PLAYER",
+                payload: {id: result, name: data.name, wins: 0, bues: 0, games_played: 0 } });
             toggleModal();
         } catch (error) {
             console.error("Form submission failed:", error);
