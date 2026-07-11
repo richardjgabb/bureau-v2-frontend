@@ -1,10 +1,9 @@
 import ContentCard from '../../Atoms/ContentCard/ContentCard';
-import type { StatCardProps } from './types';
 
-const StatCard = ({ children}: StatCardProps) => {
+const StatCard = ({ children }) => {
 
     return (
-        <ContentCard className={"w-[45vw] md:w-[28vw] lg:w-[22vw] bg-purple"}>
+        <ContentCard className={"w-[42vw] md:w-[28vw] lg:w-[22vw] bg-purple"}>
             { children }
         </ContentCard>
     )

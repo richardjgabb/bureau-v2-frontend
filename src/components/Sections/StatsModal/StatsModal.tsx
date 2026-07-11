@@ -52,7 +52,7 @@ const StatsModal = ({ cachedStats, setCachedStats, setShowStats }: StatsModalPro
                     </StatCard>
                 )}
             </RowContainer>}
-            {showPlayerStats && <RowContainer>
+            {showPlayerStats && <div className="relative flex flex-row gap-2 py-2 flex-wrap justify-center w-full">
                 {state.data?.players && Object.values(state.data.players).map((player: Player) => (
                     <PlayerStatsCard
                         key={player.id}
@@ -60,7 +60,7 @@ const StatsModal = ({ cachedStats, setCachedStats, setShowStats }: StatsModalPro
                         stats={playerStats[player.id]}
                     />
                 ))}
-            </RowContainer>}
+            </div>}
             </section>
         </OuterModal>
     )

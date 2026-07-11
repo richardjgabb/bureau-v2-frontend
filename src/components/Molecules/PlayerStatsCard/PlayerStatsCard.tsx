@@ -4,10 +4,10 @@ import type { PlayerStatsCardProps } from "./types"
 
 const PlayerStatsCard = ({ name, stats }: PlayerStatsCardProps) => {
     return (
-            <div className="flex flex-col bg-dark-blue px-6 py-4 rounded-xl min-w-[215px]">
+            <div className="flex flex-col bg-dark-blue p-3 rounded-xl w-[44vw]">
                 <ContentHeader text={name}/>
                 {stats && Object.keys(stats).map(statKey => (
-                    <div key={statKey} className="flex flex-row justify-between gap-4">
+                    <div key={statKey} className="flex flex-row justify-between items-center">
                         <ContentText text={statKey} />
                         <ContentText text={stats[statKey]?.toString()} />
                     </div>
