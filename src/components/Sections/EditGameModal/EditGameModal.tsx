@@ -8,21 +8,32 @@ import EditGameForm from "../../Molecules/EditGameForm/EditGameForm";
 
 const EditGameModal = () => {
 
-    const { state } = useGameState();
-    const [showModal, setShowModal] = useState(false);
+    const { state, dispatch } = useGameState();
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [removedPlayers, setRemovedPlayers] = useState<object>({});
 
-    const toggleModal = () => {
+    const closeModal = () => {
         setShowModal(!showModal);
+    }
+
+    const openModal = () => {
+        setShowModal(true);
+    }
+
+    const handleCloseModalButton = () => {
+        dispatch({ type: 'SET_DATA', payload: { ...state.data, players: { ...state.data.players, ...removedPlayers } } });
+        setRemovedPlayers({});
+        setShowModal(false);
     }
 
     return (
         <>
-            {!showModal && <SecondaryButton text={'Edit Game'} onClick={toggleModal} type="button"/>}
+            {!showModal && <SecondaryButton text={'Edit Game'} onClick={openModal} type="button"/>}
             {showModal &&
-                <OuterModal setShowModal={toggleModal}>
+                <OuterModal setShowModal={handleCloseModalButton}>
                     {state.loading && <LoadingSpinner />}
                     {state.error && <ErrorSpan message={state.error} />}
-                    <EditGameForm setShowModal={toggleModal}/>
+                    <EditGameForm setShowModal={closeModal} removedPlayers={removedPlayers} setRemovedPlayers={setRemovedPlayers}/>
                 </OuterModal>}
         </>
     )

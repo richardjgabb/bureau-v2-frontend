@@ -99,25 +99,12 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
         return { ...state, data: { ...state.data, players: action.payload } };
       case 'UPDATE_GAME': {
         const updates = action.payload;
-
         return {
             ...state,
             data: {
                 ...state.data,
                 name: updates.game_name,
-                buyIn: updates.buy_in,
-                players: {
-                    ...state.data.players,
-                    ...Object.entries(updates).reduce((acc, [id, score]) => {
-                        if (state.data.players[id]) {
-                            acc[id] = {
-                                ...state.data.players[id],
-                                current_score: score
-                            };
-                        }
-                        return acc;
-                    }, {})
-                }
+                buyIn: updates.buy_in
             }
         };
       }

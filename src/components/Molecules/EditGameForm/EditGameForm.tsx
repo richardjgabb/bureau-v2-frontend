@@ -7,7 +7,7 @@ import { updateGameData } from "../../../hooks/fetch/fetchGame";
 import AvailablePlayersDropdown from "../../Atoms/AvailablePlayersDropdown/AvailablePlayersDropdown";
 import InputLabel from "../../Atoms/InputLabel/InputLabel";
 
-const EditGameForm = ({ setShowModal }) => {
+const EditGameForm = ({ setShowModal, removedPlayers, setRemovedPlayers }) => {
 
     const { state, dispatch } = useGameState();
 
@@ -16,6 +16,7 @@ const EditGameForm = ({ setShowModal }) => {
     const onSubmit = async (data) => {
         dispatch({ type: 'SET_LOADING', payload: true });
         try {
+            setRemovedPlayers({});
             await updateGameData(state.data.id, state.data.round - 1, data);
 
             dispatch({ type: 'UPDATE_GAME', payload: data });
@@ -34,7 +35,7 @@ const EditGameForm = ({ setShowModal }) => {
 
     const handleRemovePlayer = (playerId: string) => {
         unregister(playerId.toString());
-
+        setRemovedPlayers({...removedPlayers, [playerId]: state.data?.players[playerId]});
         dispatch({ type: 'REMOVE_PLAYER', payload: removePlayer(playerId) });
     };
 
