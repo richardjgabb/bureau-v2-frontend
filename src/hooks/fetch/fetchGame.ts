@@ -1,3 +1,5 @@
+import apiRequest from "../../ApiClient/ApiClient";
+
 export const updateGameData = async (gameId: number, round: number, data: object) => {
     const { game_name, buy_in, ...players } = data;
 
@@ -9,9 +11,8 @@ export const updateGameData = async (gameId: number, round: number, data: object
         Object.entries(players).map(([key, value]) =>  [Number(key), Number(value)])
     )};
 
-    const response = await fetch(import.meta.env.VITE_API_URL + `games/${gameId}`, {
+    const response = await apiRequest(`games/${gameId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(obj),
         // credentials: 'include',
     });
@@ -28,7 +29,7 @@ export const updateGameData = async (gameId: number, round: number, data: object
 };
 
 export const fetchAllGames = async () => {
-    const response = await fetch(import.meta.env.VITE_API_URL + `games`);
+    const response = await apiRequest(`games`);
     if (!response.ok) {
         let errMsg = 'Failed to fetch games';
         const errorData = await response.json();

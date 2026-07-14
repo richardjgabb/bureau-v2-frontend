@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { FetchState } from './types';
+import apiRequest from '../ApiClient/ApiClient';
 
 export function useFetch<T = unknown>(
   url: string,
@@ -14,7 +15,7 @@ export function useFetch<T = unknown>(
     setError(null);
 
     try {
-      const response = await fetch(url);
+      const response = await apiRequest(url);
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);

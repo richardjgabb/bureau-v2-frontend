@@ -1,4 +1,5 @@
 import { useState } from "react"
+import apiRequest from "../ApiClient/ApiClient"
 
 interface Player {
     id: number
@@ -10,7 +11,7 @@ export const useAvailablePlayers = () => {
     const [availablePlayers, setAvailablePlayers] = useState<Player[]>([])
 
     const fetchAvailablePlayers = async (gameId: number) => {
-        const response = await fetch(import.meta.env.VITE_API_URL + `games/${gameId}/availablePlayers`);
+        const response = await apiRequest(`games/${gameId}/availablePlayers`);
         if (!response.ok) {
             let errMsg = 'Failed to fetch available players';
             const errorData = await response.json();

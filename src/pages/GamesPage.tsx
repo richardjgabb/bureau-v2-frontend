@@ -1,8 +1,6 @@
 
 import MainHeader from "../components/Atoms/MainHeader/MainHeader"
 import TableRow from "../components/Atoms/TableRow/TableRow"
-import { useFetch } from "../hooks/useFetch"
-import type { ApiResponse } from "./GamePage/types"
 import LoadingSpinner from "../components/Atoms/LoadingSpinner/LoadingSpinner"
 import ErrorSpan from "../components/Atoms/ErrorSpan/ErrorSpan"
 import { poundConversion } from "../hooks/poundConversion"

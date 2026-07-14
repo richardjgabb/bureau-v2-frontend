@@ -11,6 +11,7 @@ import AddIcon from "../../Atoms/Icons/AddIcon.tsx";
 import TertiaryButton from "../../Atoms/TertiaryButton/TertiaryButton.tsx";
 import { BureauContext } from "../../../Context/BureauProvider.tsx";
 import { fetchAllPlayers } from "../../../hooks/fetch/fetchPlayers.ts";
+import apiRequest from "../../../ApiClient/ApiClient.ts";
 
 const NewGameForm = () => {
   // 1. Hook for fetching existing players
@@ -84,9 +85,8 @@ const NewGameForm = () => {
     };
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}games`, {
+      const response = await apiRequest('games', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 

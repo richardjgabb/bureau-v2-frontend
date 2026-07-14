@@ -1,7 +1,8 @@
+import apiRequest from "../../ApiClient/ApiClient";
+
 export const addNewPlayer = async (data: object) => {
-    const response = await fetch(import.meta.env.VITE_API_URL + `players`, {
+    const response = await apiRequest(`players`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         // credentials: 'include',
         body: JSON.stringify(data),
     });
@@ -18,7 +19,7 @@ export const addNewPlayer = async (data: object) => {
 }
 
 export const fetchAllPlayers = async () => {
-    const response = await fetch(import.meta.env.VITE_API_URL + `players`);
+    const response = await apiRequest(`players`);
     if (!response.ok) {
         let errMsg = 'Failed to fetch players';
         const errorData = await response.json();
