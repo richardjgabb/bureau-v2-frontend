@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../Context/AuthContext';
 import InputLabel from '../../components/Atoms/InputLabel/InputLabel';
 import PrimaryButton from '../../components/Atoms/PrimaryButton/PrimaryButton';
+import apiRequest from "../../ApiClient/ApiClient";
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -14,9 +15,8 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8080/api/login', {
+      const response = await apiRequest('login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
 
