@@ -27,6 +27,16 @@ const ScoreboardModal = ({ cachedRound, setCachedRound, setShowScoreboard }: Sco
         setCachedRound(state.data?.round ?? 1);
     }, [])
 
+    const getRoundResult = (potWinner: string, bues: [], playerId: string) => {
+        if (potWinner == playerId) {
+            return 'win'
+        } else if (bues.includes(Number(playerId))) {
+            return 'bued'
+        } else {
+            return 'safe'
+        }
+    }
+
     return (
         <OuterModal setShowModal={() =>setShowScoreboard(false)}>
             <section className="bg-white/40 p-4 rounded-lg w-full h-fit overflow-x-scroll">
@@ -49,7 +59,7 @@ const ScoreboardModal = ({ cachedRound, setCachedRound, setShowScoreboard }: Sco
                                 {Object.keys(state.data.players).map(player => (
                                     <ScoreboardData data={ isNaN(round.scores[player]) ? '-' : poundConversion(round.scores[player]) }
                                         key={'player_' + player + 'round_' + round.round}
-                                        isPotWinner={round.pot_winner == player}
+                                        result={getRoundResult(round.pot_winner, round.bues ?? [], player)}
                                     />
                                 ))}
                                 <ScoreboardData data={ poundConversion(round.pot) } key={'pot' + round.pot} />
