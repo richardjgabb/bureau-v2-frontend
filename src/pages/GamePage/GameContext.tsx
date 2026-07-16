@@ -39,7 +39,7 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
     case 'SET_DEALER':
       return { ...state, data: { ...state.data, dealerId: state.data.dealerId === action.payload ? null : action.payload }};
     case 'SET_DATA':
-      return { ...state, data: { ...action.payload, buedIds: [], potWinnerId: null }, loading: false, error: null };
+      return { ...state, data: { ...action.payload, buedIds: [], potWinnerId: null, dealerId: null }, loading: false, error: null };
     case 'SET_SCOREBOARD':
       return { ...state, data: { ...state.data, scoreboard: action.payload}, loading: false, error: null };
     case 'SET_STATS':

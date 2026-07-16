@@ -33,8 +33,6 @@ const PlayerPage = () => {
         fetchPlayerStats();
     }, [])
 
-    console.log(playerStats)
-
     return (
         <section className="flex flex-col gap-4">
                 <MainHeader text={playerStats ? `${playerStats['Player Name']}` : 'Stats'} />

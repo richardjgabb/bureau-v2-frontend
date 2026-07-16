@@ -41,6 +41,10 @@ const GameSection = () => {
             setShowResultButtons(true)
             return
         }
+        if (state.data.dealerId === null) {
+            alert("Please select a dealer")
+            return
+        }
         dispatch({ type: 'SET_LOADING', payload: true })
         try {
             dispatch({ type: 'UPDATE_SCORES', payload: updateScores(state.data.players, state.data?.currentPotSize, state.data.potWinnerId, state.data.buedIds) })

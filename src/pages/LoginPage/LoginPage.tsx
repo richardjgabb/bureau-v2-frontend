@@ -35,9 +35,10 @@ const LoginPage = () => {
   };
 
   return (
-    <div className='w-[50vw] justify-center m-auto flex flex-col text-white py-10'>
+    <section className='flex flex-col gap-4 items-center h-[100vh]'>
+    <div className='w-[80vw] justify-center m-auto flex flex-col text-white py-10'>
       <form onSubmit={handleSubmit} className='flex flex-col gap-2 p-4 bg-dark-gray rounded-xl'>
-        <img src="/Bureau.png" alt="Bureau logo" className="w-[20vw] m-auto" />
+        <img src="/Bureau.png" alt="Bureau logo" className="w-[40vw] m-auto" />
         <InputLabel htmlFor="username" label="Username" />
         <input
           className='grow px-4 py-2 bg-white/20 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all shadow-sm'
@@ -63,6 +64,7 @@ const LoginPage = () => {
         </div>
       </form>
     </div>
+    </section>
   );
 };
 
