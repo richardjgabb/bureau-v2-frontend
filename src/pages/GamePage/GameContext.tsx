@@ -25,7 +25,8 @@ const reducer = (state: GamePageState, action: GamePageAction) => {
         ...state,
         data: {
           ...state.data,
-          buedIds: [...state.data.buedIds]?.filter((id) => id !== action.payload)
+          buedIds: [...state.data.buedIds]?.filter((id) => id !== action.payload),
+          potWinnerId: state.data.potWinnerId === action.payload ? null : state.data.potWinnerId
         }
       };
     case 'SET_BUED':

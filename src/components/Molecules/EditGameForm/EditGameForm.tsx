@@ -17,9 +17,8 @@ const EditGameForm = ({ setShowModal, removedPlayers, setRemovedPlayers }) => {
         dispatch({ type: 'SET_LOADING', payload: true });
         try {
             setRemovedPlayers({});
-            await updateGameData(state.data.id, state.data.round - 1, data);
-
-            dispatch({ type: 'UPDATE_GAME', payload: data });
+            const result = await updateGameData(state.data.id, state.data.round - 1, data);
+            dispatch({ type: 'SET_DATA', payload: result });
             setShowModal();
         } catch(err) {
             dispatch({ type: 'SET_ERROR', payload: err.message });
